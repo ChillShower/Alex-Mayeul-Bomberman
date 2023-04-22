@@ -1,4 +1,5 @@
 #include "../include/renderer.h"
+//#include"../include/player.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -35,6 +36,7 @@ int initWindow(screen_t* screen,window_t* window){
             printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
             return 1;
         }
+    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     return 0;
 };
 
@@ -70,31 +72,77 @@ int grid_init(screen_t* screen,window_t* window,SDL_Rect* rect_array, int* grill
 
 }
 
-int grid_renderer_first(SDL_Rect* array_rect, window_t* window, int* grid, int grid_width,int size_rect){
+int grid_renderer_first(SDL_Rect* array_rect, window_t* window, int* grid, int grid_width){
     SDL_SetRenderDrawColor(window->cur_renderer,255,255,255,255);
     SDL_RenderDrawRects(window->cur_renderer,array_rect,grid_width*grid_width);
     SDL_RenderPresent( window->cur_renderer);
     return 0;
 };
-int grid_renderer(SDL_Rect* array_rect, window_t* window, int* grid, int grid_width,int size_rect){
-    SDL_Surface* tmp= SDL_LoadBMP("../assets/text_road.bmp");
+int grid_renderer(SDL_Rect* array_rect,SDL_Texture* texture_block, window_t* window, int* grid, int grid_width){
+    //SDL_Surface* tmp= SDL_LoadBMP("../assets/text_road.bmp");
+    
+    //loadTexture(texture_block,"../assets/text1.png",window);
     for(int i=0;i<grid_width;i++){
         for(int j=0;j<grid_width;j++){
         if (grid[i+j*grid_width]==0){
             
-            SDL_SetRenderDrawColor(window->cur_renderer,255,255,255,255);
+            //SDL_SetRenderDrawColor(window->cur_renderer,255,255,255,255);
+            draw_on_rectangle(texture_block,array_rect[i+j*grid_width],window);
+            
         };
-        if (grid[i+j*grid_width]==1){
+       if (grid[i+j*grid_width]==1){
             SDL_SetRenderDrawColor(window->cur_renderer,0,0,255,255);
+            SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
         };
         if (grid[i+j*grid_width]==2){
             SDL_SetRenderDrawColor(window->cur_renderer,255,0,0,255);
-        };
             SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
         };
+            
+        };
+        //SDL_RenderPresent(window->cur_renderer);
     };
-    SDL_FreeSurface(tmp);
-    SDL_RenderPresent( window->cur_renderer);
+    //SDL_FreeSurface(tmp);
+   // SDL_free
+    
     
     return 0;
 };
+
+SDL_Texture* loadTexture(SDL_Texture *texture,char *filename, window_t* window)
+{
+    SDL_Texture *texture_block;
+	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
+
+	texture_block = IMG_LoadTexture(window->cur_renderer, filename);
+   
+	return texture_block;
+}
+int draw_on_rectangle(SDL_Texture * texture,SDL_Rect rectangle,window_t* window)
+{
+    SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h);
+    SDL_RenderCopy(window->cur_renderer, texture, NULL, &rectangle);
+    return 0;
+}
+
+int player_set_texture(player_t* player,window_t* window,char* filename){
+    
+    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
+
+	player->texture_player = IMG_LoadTexture(window->cur_renderer, filename);
+    return 0;
+};
+
+int draw_player(player_t* player, window_t* window)
+{
+    //SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h);
+    SDL_RenderCopy(window->cur_renderer, player ->texture_player, NULL, &(player->hitbox));
+    return 0;
+}
+
+
+SDL_Texture* SDL_texture_init(SDL_Texture* texture, window_t* window, char* filename)
+{
+    return loadTexture(texture,filename, window);
+}
+

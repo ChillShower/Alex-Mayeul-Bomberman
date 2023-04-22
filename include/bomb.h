@@ -1,4 +1,4 @@
-#include "sprite.h"
+
 
 typedef struct bomb{
     int frame; // quand frame arrive à 0 -> explosion

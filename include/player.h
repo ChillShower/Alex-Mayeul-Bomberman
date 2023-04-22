@@ -1,21 +1,33 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 
 typedef struct player{
-    float x_coord;
-    float y_coord;
+    int x_coord;
+    int y_coord;
     int health;
+    int up;
+    int down;
+    int left;
+    int right;
+    SDL_Texture* texture_player;
+    SDL_Rect hitbox;
 }player_t;
 
 //init
 
 //coord
-float getCoordx(player_t* player);
+int getCoordx(player_t* player);
 
-float getCoordy(player_t* player);
+int getCoordy(player_t* player);
 
-int setCoordx(player_t* player,float x);
+int setCoordx(player_t* player,int x);
 
-int setCoordy(player_t* player,float y);
+int setCoordy(player_t* player,int y);
 
 //health
 int getHealth(player_t* player);
@@ -30,5 +42,7 @@ int healthAdd(player_t* player, int add);
 int getCasex(player_t* player);
 
 int getCasey(player_t* player);
+int playerinit(player_t* player);
+int player_rect_actualise(player_t* player);
 
-
+#endif

@@ -1,19 +1,19 @@
 #include "../include/player.h"
 
-float getCoordx(player_t* player){
+int getCoordx(player_t* player){
     return player->x_coord;
 };
 
-float getCoordy(player_t* player){
+int getCoordy(player_t* player){
    return player->y_coord; 
 };
 
-int setCoordx(player_t* player,float x){
+int setCoordx(player_t* player,int x){
     player->x_coord=x;
     return 0;
 };
 
-int setCoordy(player_t* player,float y){
+int setCoordy(player_t* player,int y){
     player->y_coord=y;
     return 0;
 };
@@ -38,9 +38,31 @@ int healthAdd(player_t* player, int add){
 };
 
 int getCasex(player_t* player){
-    return (int)(player->x_coord);
+    return (player->x_coord);
 };
 
 int getCasey(player_t* player){
-    return (int)(player->y_coord);
+    return (player->y_coord);
 }
+int playerinit(player_t* player){
+    setCoordx(player,100);
+    setCoordy(player,200);
+    setHealth(player,3);
+    player->up=0;
+    player->down=0;
+    player->left=0;
+    player->right=0;
+    player->hitbox.x=player->x_coord;
+    player->hitbox.y=player->y_coord;
+    player->hitbox.h=40;
+    player->hitbox.w=40;
+    player ->texture_player=NULL;
+    return 0;
+};
+
+int player_rect_actualise(player_t* player){
+    player->hitbox.x=player->x_coord;
+    player->hitbox.y=player->y_coord;
+    return 0;
+};
+

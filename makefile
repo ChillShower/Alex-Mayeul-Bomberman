@@ -17,7 +17,7 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ `sdl2-config --cflags --libs` -lSDL2_image
 
 test: $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o test_exec/$@ $(TEST_DIR)/test.c $(OBJ_FILES) `sdl2-config --cflags --libs` -lSDL2_image
+	$(CC) $(CFLAGS) -o test_exec/$@.x $(TEST_DIR)/test.c $(OBJ_FILES) `sdl2-config --cflags --libs` -lSDL2_image
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ `sdl2-config --cflags --libs` -lSDL2_image
