@@ -1,3 +1,6 @@
+#ifndef BOMB_H
+#define BOMB_H
+
 #include "sprite.h"
 
 typedef struct bomb{
@@ -8,3 +11,5 @@ typedef struct bomb{
 
 int bombInit(bomb_t* bomb);
 int isExploded(bomb_t* bomb);
+
+#endif

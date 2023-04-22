@@ -1,3 +1,6 @@
+#ifndef INSTANCE_H
+#define INSTANCE_H
+
 #include "bomb.h"
 #include "explosion.h"
 #include "instance.h"
@@ -15,3 +18,4 @@ typedef struct listPlayers{
 int listPlayersInit(listPlayers_t* list);   
 
 
+#endif

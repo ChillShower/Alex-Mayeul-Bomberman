@@ -1,3 +1,6 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include <string.h>
 #include "sprite.h"
 
@@ -36,3 +39,4 @@ int getCasex(player_t* player);
 int getCasey(player_t* player);
 
 
+#endif
