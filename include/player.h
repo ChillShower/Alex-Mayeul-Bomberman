@@ -1,12 +1,16 @@
-
+#include <string.h>
+#include "sprite.h"
 
 typedef struct player{
     float x_coord;
     float y_coord;
     int health;
+    char* name;
+    sprite_t sprite;
 }player_t;
 
 //init
+int playerInit(player_t* player);
 
 //coord
 float getCoordx(player_t* player);
