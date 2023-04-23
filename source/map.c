@@ -6,7 +6,21 @@ int mapInit(map_t* map){
      map->grid = NULL;
      map->width = 0;
      map->height = 0;
+     map->sizeOfCell = 0;
      return 0;
+}
+
+int mapInstanciation(map_t* map, int width, int height, screen_t* screen)
+{
+    map->width = width;
+    map->height = height;
+
+    int screenWidth;
+    screenGetWidth(&screenWidth, screen);
+
+    map->sizeOfCell = (int) screenWidth / width;
+
+    return 0;
 }
 
 int mapDestruction(map_t* map)
@@ -39,7 +53,22 @@ int mapGetHeight(int* height, map_t* map)
     return 0;
 }
 
-int generateRandomMap(int density, map_t* map){
+int mapGetSizeOfCell(int* size, map_t* map)
+{
+    *size = map->sizeOfCell;
+    return 0;
+}
+
+int mapGetGrid(cell_t* grid, map_t* map){
+    grid = map->grid;
+    return 0;
+}
+
+int mapSetGrid(cell_t* grid, map_t* map){
+    map->grid = grid;
+    return 0;
+}
+int generateMap(int density, map_t* map){
     
     srand(time(NULL)); 
 
@@ -115,42 +144,42 @@ int generateRandomMap(int density, map_t* map){
     return 0;
 }
 
-int getPlayer(player_t* player, cell_t* cell){
+int cellGetPlayer(player_t* player, cell_t* cell){
     player = cell->player;
     return 0;
 }
 
-int getBomb(bomb_t* bomb, cell_t* cell){
+int cellGetBomb(bomb_t* bomb, cell_t* cell){
     bomb = cell->bomb;
     return 0;
 }
 
-int getExplosion(explosion_t* explosion, cell_t* cell){
+int cellGetExplosion(explosion_t* explosion, cell_t* cell){
     explosion = cell->explosion;
     return 0;
 }
 
-int getWall(wall_t* wall, cell_t* cell){
+int cellGetWall(wall_t* wall, cell_t* cell){
     wall = cell->wall;
     return 0;
 }
 
-int setPlayer(player_t* player, cell_t* cell){
+int cellSetPlayer(player_t* player, cell_t* cell){
     cell->player = player;
     return 0;
 }
 
-int setBomb(bomb_t* bomb, cell_t* cell){
+int cellSetBomb(bomb_t* bomb, cell_t* cell){
     cell->bomb = bomb;
     return 0;
 }
 
-int setExplosion(explosion_t* explosion, cell_t* cell){
+int cellSetExplosion(explosion_t* explosion, cell_t* cell){
     cell->explosion = explosion;
     return 0;
 }
 
-int setWall(wall_t* wall, cell_t* cell){
+int cellSetWall(wall_t* wall, cell_t* cell){
     cell->wall = wall;
     return 0;
 }

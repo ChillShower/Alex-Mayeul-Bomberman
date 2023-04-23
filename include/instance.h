@@ -15,6 +15,11 @@ typedef struct listPlayers{
     int maxNumber; // nombre maximum de joueurs
 } listPlayers_t;
 
+typedef struct instance{
+    listPlayers_t listPlayers;
+    map_t* map;
+} instance_t;
+
 int listPlayersInit(listPlayers_t* list);   
 
 

@@ -5,7 +5,7 @@
 #include "player.h"
 #include "explosion.h"
 #include "sprite.h"
-
+#include "renderer.h"
 typedef enum wallstate{BRITTLE, SOLID} wallstate_t;
 
 typedef struct wall{
@@ -31,21 +31,30 @@ typedef struct map{
     cell_t* grid;
     int width;
     int height;
-    
+    int sizeOfCell; // en pixels
+     
 } map_t;
 
 int mapInit(map_t* map);
+int mapInstanciation(map_t* map, screen_t* screen);
 int mapDestruction(map_t* map);
-int generateMap(map_t* map);
+int generateMap(int density, map_t* map);
 
-int getPlayer(player_t* player, cell_t* cell);
-int getBomb(bomb_t* bomb, cell_t* cell);
-int getExplosion(explosion_t* explosion, cell_t* cell);
-int getWall(wall_t* wall, cell_t* cell);
+int mapGetWidth(int* width, map_t* map);
+int mapGetHeight(int* height, map_t* map);
+int mapGetSizeOfCell(int*size, map_t* map);
+int mapGetGrid(cell_t* grid, map_t* map);
+int cellGetPlayer(player_t* player, cell_t* cell);
+int cellGetBomb(bomb_t* bomb, cell_t* cell);
+int cellGetExplosion(explosion_t* explosion, cell_t* cell);
+int cellGetWall(wall_t* wall, cell_t* cell);
 
-int setPlayer(player_t* player, cell_t* cell);
-int setBomb(bomb_t* bomb, cell_t* cell);
-int setExplosion(explosion_t* explosion, cell_t* cell);
-int setWall(wall_t* wall, cell_t* cell);
+int mapSetWidth(int width, map_t* map);
+int mapSetHeight(int height, map_t* map);
+int mapSetGrid(cell_t* grid, map_t* map);
+int cellSetPlayer(player_t* player, cell_t* cell);
+int cellSetBomb(bomb_t* bomb, cell_t* cell);
+int cellSetExplosion(explosion_t* explosion, cell_t* cell);
+int cellSetWall(wall_t* wall, cell_t* cell);
 
 #endif

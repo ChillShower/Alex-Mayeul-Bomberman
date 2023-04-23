@@ -1,11 +1,15 @@
-#include "../include/event.h"
-//#include "../include/renderer.h"
-//#include "../include/player.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <stdbool.h>
+#include "event.h"
 
+/*
+
+SOMMAIRE DES INPUTS:
+UP,DOWN, RIGHT, LEFT : mouvements correspondants
+ECHAP: Quitter le jeu
+ESPACE: Poser une bombe
+
+
+
+*/
 
 void doInput(player_t* player)
 {
@@ -39,22 +43,27 @@ int doKeyDown(SDL_KeyboardEvent *event,player_t* player)
 	{
 		if (event->keysym.scancode == SDL_SCANCODE_UP)
 		{
-			player->up = 1;
+			player->inputs->up = 1;
 		}
 
 		if (event->keysym.scancode == SDL_SCANCODE_DOWN)
 		{
-			player->down = 1;
+			player->inputs->down = 1;
 		}
 
 		if (event->keysym.scancode == SDL_SCANCODE_LEFT)
 		{
-			player->left = 1;
+			player->inputs->left = 1;
 		}
 
 		if (event->keysym.scancode == SDL_SCANCODE_RIGHT)
 		{
-			player->right = 1;
+			player->inputs->right = 1;
+		}
+
+		if (event->keysym.scancode == SDL_SCANCODE_KP_SPACE)
+		{
+			player->inputs->space = 1;
 		}
 	}
     return 0;
@@ -66,22 +75,27 @@ int  doKeyUp(SDL_KeyboardEvent *event,player_t* player)
 	{
 		if (event->keysym.scancode == SDL_SCANCODE_UP)
 		{
-			player->up = 0;
+			player->inputs->up = 0;
 		}
 
 		if (event->keysym.scancode == SDL_SCANCODE_DOWN)
 		{
-			player->down = 0;
+			player->inputs->down = 0;
 		}
 
 		if (event->keysym.scancode == SDL_SCANCODE_LEFT)
 		{
-			player->left = 0;
+			player->inputs->left = 0;
 		}
 
 		if (event->keysym.scancode == SDL_SCANCODE_RIGHT)
 		{
-			player->right = 0;
+			player->inputs->right = 0;
+		}
+
+		if (event->keysym.scancode == SDL_SCANCODE_KP_SPACE)
+		{
+			player->inputs->space = 0;
 		}
 	}
     return 0;

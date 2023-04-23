@@ -1,4 +1,5 @@
 #include "../include/player.h"
+#include "map.h"
 
 int getCoordx(player_t* player){
     return player->x_coord;
@@ -48,10 +49,11 @@ int playerinit(player_t* player){
     setCoordx(player,100);
     setCoordy(player,200);
     setHealth(player,3);
-    player->up=0;
-    player->down=0;
-    player->left=0;
-    player->right=0;
+    player->speed=4;
+    player->inputs->up=0;
+    player->inputs->down=0;
+    player->inputs->left=0;
+    player->inputs->right=0;
     player->hitbox.x=player->x_coord;
     player->hitbox.y=player->y_coord;
     player->hitbox.h=40;
@@ -66,3 +68,46 @@ int player_rect_actualise(player_t* player){
     return 0;
 };
 
+int playerGoRight(player_t* player)
+{
+    player.x_coord += player->movement->speed;
+    return 0;
+}
+
+int playerGoLeft(player_t* player)
+{
+    player.x_coord -= player->movement->speed;
+    return 0;
+}
+
+int playerGoUp(player_t* player)
+{
+    player.y_coord -= player->movement->speed;
+    return 0;
+}
+
+int playerGoDown(player_t* player)
+{
+    player.y_coord += player->movement->speed;
+    return 0;
+}
+
+int playerPutBomb(player_t* player, map_t* map)
+{
+    int sizeOfCell;
+    mapGetSizeOfCell(&sizeOfCell, map);
+    int x_grid = (int) ( player->x_coord / sizeOfCell );
+    int y_grid = (int) ( player->y_coord / sizeOfCell );
+
+    int width;
+    mapGetWidth(&width, map);
+
+    cell_t* grid;
+    mapGetGrid(grid, &map);
+
+    bomb_t* bomb = malloc(sizeof(bomb_t));
+    bomb->frame = BOMB_FRAME;
+
+    grid[y_grid + x_grid * width].bomb = bomb;
+    return 0;
+}

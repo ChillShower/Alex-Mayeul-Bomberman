@@ -1,9 +1,6 @@
-#include "../include/renderer.h"
-//#include"../include/player.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <stdbool.h>
+#include <renderer.h>
+#include <map.h>
+
 
 int initScreen(screen_t* screen){
     screen->width=1920;
@@ -50,6 +47,23 @@ int destroyWindow(window_t* window){
     return 0;
 };
 
+int screenGetWidth(int* width, screen_t* screen){
+    *width = screen->wdith;
+    return 0;
+}
+int screenGetHeight(int* height, screen_t* screen){
+    *height = screen->height;
+    return 0;
+}
+int screenSetWidth(int width, screen_t* screen){
+    screen->widht = width;
+    return 0;
+}
+int screenSetHeight(int height, screen_t* screen){
+    screen->height = height;
+    return 0;
+}
+
 int initSDL_Rect(SDL_Rect * pos, int x, int y, unsigned int w, unsigned int h){
 	if(pos == NULL) return 1;
 	pos->x = x;      //abscisse
@@ -78,6 +92,7 @@ int grid_renderer_first(SDL_Rect* array_rect, window_t* window, int* grid, int g
     SDL_RenderPresent( window->cur_renderer);
     return 0;
 };
+/*
 int grid_renderer(SDL_Rect* array_rect,SDL_Texture* texture_block, window_t* window, int* grid, int grid_width){
     //SDL_Surface* tmp= SDL_LoadBMP("../assets/text_road.bmp");
     
@@ -108,6 +123,39 @@ int grid_renderer(SDL_Rect* array_rect,SDL_Texture* texture_block, window_t* win
     
     return 0;
 };
+*/
+
+int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window, int* grid){
+
+    cell_t* grid = map->grid;
+    int grid_width = mapGetWidth(map);
+    int grid_heigh = mapGetHeight(map);
+
+    for(int i=0;i<grid_height;i++){
+        for(int j=0;j<grid_width;j++){
+
+            cell_t cell = grid[i + j*grid_width];
+            wall_t wall;
+            mapGetWall(&wall, &cell);
+
+            if( wall.wallstate == SOLID )
+            {
+                SDL_SetRenderDrawColor(window->cur_renderer,0,0,255,255);
+                SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+            }
+            else if( wall.wallstate == BRITTLE)
+            {
+                SDL_SetRenderDrawColor(window->cur_renderer,0,255,0,255);
+                SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);   
+            }
+            
+        };
+
+    };
+    
+    return 0;
+};
+
 
 SDL_Texture* loadTexture(SDL_Texture *texture,char *filename, window_t* window)
 {

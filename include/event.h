@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define FRAME_RATE = 60
+
 void doInput(player_t* player);
 int doKeyDown(SDL_KeyboardEvent *event,player_t* player);
 int doKeyUp(SDL_KeyboardEvent *event,player_t* player);

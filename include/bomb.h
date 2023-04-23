@@ -1,11 +1,12 @@
-<<<<<<< HEAD
-
-=======
 #ifndef BOMB_H
 #define BOMB_H
 
-#include "sprite.h"
->>>>>>> 481d0bccaa26d81fece76e98b307ac010e068ed4
+#include "event.h"
+
+#define BOMB_DURATION = 3
+#define BOMB_FRAME = FRAME_RATE*BOMB_DURATION
+
+#include <sprite.h>
 
 typedef struct bomb{
     int frame; // quand frame arrive à 0 -> explosion
