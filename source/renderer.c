@@ -2,9 +2,16 @@
 #include <map.h>
 
 
+/* PARAMETRES VISUELS*/
+#define FRAME_RATE = 60
+#define DEFAULT_SCREEN_WIDTH = 1920;
+#define DEFAULT_SCREEN_HEIGHT = 1080;
+/*__________________________________________*/
+
+
 int initScreen(screen_t* screen){
-    screen->width=1920;
-    screen->height=1080;
+    screen->width= DEFAULT_SCREEN_WIDTH;
+    screen->height= DEFAULT_SCREEN_HEIGHT;
     return 0;
 
 }

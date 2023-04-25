@@ -7,7 +7,25 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define FRAME_RATE = 60
+/*
+
+SOMMAIRE DES INPUTS:
+UP,DOWN, RIGHT, LEFT : mouvements correspondants
+ECHAP: Quitter le jeu
+ESPACE: Poser une bombe
+
+
+
+*/
+
+/* DEFINITION DES INPUTS : */
+#define UP_KEY = SDL_SCANCODE_UP
+#define DOWN_KEY = SDL_SCANCODE_DOWN
+#define LEFT_KEY = SDL_SCANCODE_LEFT
+#define RIGHT_KEY = SDL_SCANCODE_RIGHT
+#define SPACE_KEY = SDL_SCANCODE_KP_SPACE
+
+/*__________________________________________*/
 
 void doInput(player_t* player);
 int doKeyDown(SDL_KeyboardEvent *event,player_t* player);

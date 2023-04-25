@@ -1,0 +1,60 @@
+RAPPORT:
+
+MAYEUL LAMBERT dernière modification à 23/04/2023 à 14h 35.
+
+
+FICHIER MODIFIES:
+player
+event
+bomb
+renderer
+map
+
+
+CORPS DU RAPPORT:
+
+modification du player.h et player.c
+
+player.h:
+ajout objet inputs
+suppression des int up down etc..
+ajout parametre vitesse dans l'objet player
+
+les deux:
+nouvelles fonctions, fonctions d'actions (aller à droite etc., poser une bombe)
+
+modification de event.h:
+ajout des constantes d'inputs
+petit sommaire en commentaire pour résumer les commandes
+
+modification des fonctions doKeyDown, doKeyUp pour ajouter la barre espace comme input
+
+modification de bomb.h:
+ajout des constantes BOMB_DURATION qui définit la durée d'une bombe en seconde
+		     BOMB_FRAME qui définit le nombre de frame d'une animation complète de la bombe
+
+modification de renderer.h et renderer.c:
+
+renderer.h:
+ajout de la constante FRAME_RATE qui définit le nombre d'image par seconde qui arrive sur l'écran.
+ajout des constantes DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT (écran par défaut 1920x1080)
+
+renderer.c:
+modification de la fonction grid_renderer
+elle fait un rendu de la carte cette fois-ci
+
+
+modification de map.h et map.c:
+
+ajout de la variable sizeOfCell (la taille d'une case en pixels) qui servira à savoir dans quelle case
+se situe le joueur en fonction de ses coordonnées en pixels.
+rename des setters et getters (syntaxe incorrecte)
+ajouts d'autres setters et getters
+
+Ajout de la fonction mapInstanciation qui permet de changer les paramètres de la map
+à ne pas confondre avec mapInit qui initialise l'objet en partant de rien.
+
+
+
+NOTE: Tu as crée une fonction playerinit wallah j'avais déjà fait un playerInit, mets moi cette majuscule sur le i
+Je vais vriller
