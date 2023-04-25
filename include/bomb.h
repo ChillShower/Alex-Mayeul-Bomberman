@@ -1,8 +1,6 @@
 #ifndef BOMB_H
 #define BOMB_H
 
-#include "event.h"
-
 #define BOMB_DURATION = 3
 #define BOMB_FRAME = FRAME_RATE*BOMB_DURATION
 
