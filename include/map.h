@@ -36,7 +36,6 @@ typedef struct map{
 } map_t;
 
 int mapInit(map_t* map);
-int mapInstanciation(map_t* map, screen_t* screen);
 int mapDestruction(map_t* map);
 int generateMap(int density, map_t* map);
 
