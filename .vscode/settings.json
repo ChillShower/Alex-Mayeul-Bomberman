@@ -5,6 +5,7 @@
         "player.h": "c",
         "stdio.h": "c",
         "sdl_image.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "map.h": "c"
     }
 }

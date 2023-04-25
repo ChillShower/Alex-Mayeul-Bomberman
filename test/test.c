@@ -8,9 +8,12 @@
 #include <time.h>
 #include <stdlib.h> 
 #include <assert.h>
+#include "../include/map.h"
 
 int main()
 {   
+
+    //printf("la");
     /*création et initialisation fenêtre*/
     int size=20;
     int sprite_size=40;
@@ -18,10 +21,14 @@ int main()
     initScreen(&screen);
     window_t window;
     initWindow(&screen,&window);
-    player_t player;
+    //player_t player;
     
-    playerinit(&player);
-    player_set_texture(&player,&window,"assets/player.png");
+    map_t map;
+    mapInit(&map);
+    generateMap(1/2 , &map);
+
+    //playerinit(&player);
+    //player_set_texture(&player,&window,"assets/player.png");
     /*création temporaire de l'arène */
     SDL_Rect rect_grid[size*size];
     //SDL_Event e; bool quit = false; 
@@ -41,13 +48,16 @@ int main()
     SDL_Texture* texture_block;
     texture_block=SDL_texture_init(NULL,&window,"assets/text1.png");
     SDL_SetRenderTarget(window.cur_renderer,texture_block);
-    grid_renderer_first(rect_grid,&window,NULL,size);
+    //grid_renderer_first(rect_grid,&window,NULL,size);
+    grid_renderer(rect_grid,&map,&window);
+    SDL_Delay(4000);
     //atexit(cleanup);
+    /*
     while(1==1){ 
         prepareScene(&window);
         
         doInput(&player);     
-           
+        
 		if (player.up)
 		{
 			player.y_coord-= 4;
@@ -71,12 +81,14 @@ int main()
         player_rect_actualise(&player);
             
 
-        grid_renderer(rect_grid,texture_block,&window,grid,size);
+        grid_renderer(rect_grid,&map,&window);
         draw_player(&player,&window);
 
 		presentScene(&window);
         
     };
+        */
+    mapDestruction(&map);
     destroyWindow(&window);
     return 0;
 

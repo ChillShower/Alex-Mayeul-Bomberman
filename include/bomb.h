@@ -1,8 +1,10 @@
 #ifndef BOMB_H
 #define BOMB_H
 
-#define BOMB_DURATION = 3
-#define BOMB_FRAME = FRAME_RATE*BOMB_DURATION
+#include "param.h"
+
+#define BOMB_DURATION  3
+#define BOMB_FRAME (FRAME_RATE*BOMB_DURATION)
 
 #include <sprite.h>
 

@@ -1,5 +1,5 @@
 #include "../include/player.h"
-#include "map.h"
+
 
 int getCoordx(player_t* player){
     return player->x_coord;
@@ -68,46 +68,3 @@ int player_rect_actualise(player_t* player){
     return 0;
 };
 
-int playerGoRight(player_t* player)
-{
-    player.x_coord += player->movement->speed;
-    return 0;
-}
-
-int playerGoLeft(player_t* player)
-{
-    player.x_coord -= player->movement->speed;
-    return 0;
-}
-
-int playerGoUp(player_t* player)
-{
-    player.y_coord -= player->movement->speed;
-    return 0;
-}
-
-int playerGoDown(player_t* player)
-{
-    player.y_coord += player->movement->speed;
-    return 0;
-}
-
-int playerPutBomb(player_t* player, map_t* map)
-{
-    int sizeOfCell;
-    mapGetSizeOfCell(&sizeOfCell, map);
-    int x_grid = (int) ( (double) player->x_coord /  (double) sizeOfCell );
-    int y_grid = (int) ( (double) player->y_coord / (double) sizeOfCell );
-
-    int width;
-    mapGetWidth(&width, map);
-
-    cell_t* grid;
-    mapGetGrid(grid, &map);
-
-    bomb_t* bomb = malloc(sizeof(bomb_t));
-    bomb->frame = BOMB_FRAME;
-
-    grid[y_grid + x_grid * width].bomb = bomb;
-    return 0;
-}

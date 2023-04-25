@@ -1,13 +1,8 @@
 #include <renderer.h>
-#include <map.h>
-
-
-/* PARAMETRES VISUELS*/
-#define FRAME_RATE = 60
-#define DEFAULT_SCREEN_WIDTH = 1920;
-#define DEFAULT_SCREEN_HEIGHT = 1080;
-/*__________________________________________*/
-
+#include "map.h"
+#include "param.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int initScreen(screen_t* screen){
     screen->width= DEFAULT_SCREEN_WIDTH;
@@ -55,7 +50,7 @@ int destroyWindow(window_t* window){
 };
 
 int screenGetWidth(int* width, screen_t* screen){
-    *width = screen->wdith;
+    *width = screen->width;
     return 0;
 }
 int screenGetHeight(int* height, screen_t* screen){
@@ -63,7 +58,7 @@ int screenGetHeight(int* height, screen_t* screen){
     return 0;
 }
 int screenSetWidth(int width, screen_t* screen){
-    screen->widht = width;
+    screen->width = width;
     return 0;
 }
 int screenSetHeight(int height, screen_t* screen){
@@ -132,26 +127,34 @@ int grid_renderer(SDL_Rect* array_rect,SDL_Texture* texture_block, window_t* win
 };
 */
 
-int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window, int* grid){
-
-    cell_t* grid = map->grid;
-    int grid_width = mapGetWidth(map);
-    int grid_heigh = mapGetHeight(map);
+int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window){
+    
+    //printf("ici");
+    //cell_t* grid = map->grid;
+    int grid_width;
+    mapGetWidth(&grid_width, map);
+    int grid_height;
+    mapGetHeight(&grid_height, map);
+    wall_t wall;
+    cell_t cell;
+    
 
     for(int i=0;i<grid_height;i++){
         for(int j=0;j<grid_width;j++){
 
-            cell_t cell = grid[i + j*grid_width];
-            wall_t wall;
-            mapGetWall(&wall, &cell);
+            cell = map->grid[i + j*grid_width];
+   
+            cellGetWall(&wall, &cell);
 
             if( wall.wallstate == SOLID )
             {
+                //printf("ici");
                 SDL_SetRenderDrawColor(window->cur_renderer,0,0,255,255);
                 SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
             }
             else if( wall.wallstate == BRITTLE)
             {
+                printf("ici");
                 SDL_SetRenderDrawColor(window->cur_renderer,0,255,0,255);
                 SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);   
             }

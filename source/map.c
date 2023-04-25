@@ -1,7 +1,7 @@
 #include "map.h"
 #include <time.h>
 #include <stdlib.h>
-
+#include <stdio.h>
 int mapInit(map_t* map){
      map->grid = NULL;
      map->width = 0;
@@ -10,22 +10,11 @@ int mapInit(map_t* map){
      return 0;
 }
 
-int mapInstanciation(map_t* map, int width, int height, screen_t* screen)
-{
-    map->width = width;
-    map->height = height;
 
-    int screenWidth;
-    screenGetWidth(&screenWidth, screen);
-
-    map->sizeOfCell = (int) screenWidth / width;
-
-    return 0;
-}
 
 int mapDestruction(map_t* map)
 {
-    free(map);
+    free(map->grid);
     return 0;
 }
 
@@ -68,12 +57,11 @@ int mapSetGrid(cell_t* grid, map_t* map){
     map->grid = grid;
     return 0;
 }
-int generateMap(int density, map_t* map){
-    
+int generateMap(float density, map_t* map){
     srand(time(NULL)); 
 
     //Assignation d'un nouveau tableau;
-    cell_t* grid = malloc(sizeof(cell_t) * map->height * map->width);
+    cell_t* grid = calloc(map->height * map->width ,sizeof(cell_t) );
     map->grid = grid;
 
     for(int i = 0; i<map->height; ++i)
@@ -103,7 +91,8 @@ int generateMap(int density, map_t* map){
             if ( (i != 0 && i!= 1 && i != map->height-1 && i != map->height-2) || (j != 0 && j != map->width - 1))
             {
                  
-                int r = (float) rand() / RAND_MAX;
+                //float r = ((float) rand() / (float) RAND_MAX);
+                float r=0;
 
                 if( r <= density)
                 {
@@ -140,7 +129,7 @@ int generateMap(int density, map_t* map){
             
         }
     }
-
+    //printf("la");
     return 0;
 }
 
