@@ -2,7 +2,6 @@
 #define BOMB_H
 
 #include "event.h"
-#include "renderer.h"
 
 #define BOMB_DURATION = 3
 #define BOMB_FRAME = FRAME_RATE*BOMB_DURATION

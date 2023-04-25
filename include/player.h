@@ -7,7 +7,6 @@
 
 #include <string.h>
 #include "sprite.h"
-#include "map.h"
 
 typedef struct inputs{
     int up;
@@ -53,13 +52,5 @@ int getCasex(player_t* player);
 int getCasey(player_t* player);
 int playerinit(player_t* player);
 int player_rect_actualise(player_t* player);
-
-// Actions:
-
-int playerGoRight(player_t* player);
-int playerGoLeft(player_t* player);
-int playerGoUp(player_t* player);
-int playerGoDown(player_t* player);
-int playerPutBomb(player_t* player, map_t* map);
 
 #endif

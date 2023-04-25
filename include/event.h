@@ -33,4 +33,13 @@ int doKeyUp(SDL_KeyboardEvent *event,player_t* player);
 int prepareScene(window_t* window);
 int presentScene(window_t* window);
 
+
+// JOUEUR:
+
+int playerGoRight(player_t* player);
+int playerGoLeft(player_t* player);
+int playerGoUp(player_t* player);
+int playerGoDown(player_t* player);
+int playerPutBomb(player_t* player, map_t* map);
+
 #endif

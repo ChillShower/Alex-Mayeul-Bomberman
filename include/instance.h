@@ -3,7 +3,6 @@
 
 #include "bomb.h"
 #include "explosion.h"
-#include "instance.h"
 #include "map.h"
 #include "player.h"
 #include "renderer.h"

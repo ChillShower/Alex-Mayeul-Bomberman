@@ -96,8 +96,8 @@ int playerPutBomb(player_t* player, map_t* map)
 {
     int sizeOfCell;
     mapGetSizeOfCell(&sizeOfCell, map);
-    int x_grid = (int) ( player->x_coord / sizeOfCell );
-    int y_grid = (int) ( player->y_coord / sizeOfCell );
+    int x_grid = (int) ( (double) player->x_coord /  (double) sizeOfCell );
+    int y_grid = (int) ( (double) player->y_coord / (double) sizeOfCell );
 
     int width;
     mapGetWidth(&width, map);
