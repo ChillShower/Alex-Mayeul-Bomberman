@@ -20,6 +20,6 @@ typedef struct instance{
 } instance_t;
 
 int listPlayersInit(listPlayers_t* list);   
-
+int mapInstanciation(map_t* map, screen_t* screen);
 
 #endif
