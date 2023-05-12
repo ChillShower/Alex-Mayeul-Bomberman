@@ -22,5 +22,11 @@ test: $(OBJ_FILES)
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ `sdl2-config --cflags --libs` -lSDL2_image
 
+test-mayeul: $(OBJ_FILES)
+	$(CC) $(CFLAGS) -o test_exec/$@ $(TEST_DIR)/test-mayeul.c $(OBJ_FILES) `sdl2-config --cflags --libs` -lSDL2_image
+
+$(SRC_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@ `sdl2-config --cflags --libs` -lSDL2_image
+
 clean:
 	rm -f $(OBJ_FILES) my_executable test_exec/test
