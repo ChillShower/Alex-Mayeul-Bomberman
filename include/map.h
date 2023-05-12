@@ -5,8 +5,9 @@
 #include "player.h"
 #include "explosion.h"
 #include "sprite.h"
+#include "param.h"
 
-typedef enum wallstate{BRITTLE, SOLID} wallstate_t;
+typedef enum wallstate{BRITTLE, SOLID, EMPTY} wallstate_t;
 
 typedef struct wall{
 

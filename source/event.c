@@ -90,6 +90,34 @@ int  doKeyUp(SDL_KeyboardEvent *event,player_t* player)
     return 0;
 }
 
+int reactToKey(player_t* player, map_t* map)
+{
+	if(player->inputs->right == 1)
+	{
+		playerGoRight(player);
+	}
+
+	if(player->inputs->left == 1)
+	{
+		playerGoLeft(player);
+	}
+
+		if(player->inputs->up == 1)
+	{
+		playerGoUp(player);
+	}
+		if(player->inputs->down == 1)
+	{
+		playerGoDown(player);
+	}
+		if(player->inputs->space == 1)
+	{
+		playerPutBomb(player, map);
+	}
+
+	return 0;
+}
+
 int prepareScene(window_t* window)
 {
 	SDL_SetRenderDrawColor(window->cur_renderer, 96, 128, 255, 255);
@@ -132,15 +160,20 @@ int playerPutBomb(player_t* player, map_t* map)
     int x_grid = (int) ( (double) player->x_coord /  (double) sizeOfCell );
     int y_grid = (int) ( (double) player->y_coord / (double) sizeOfCell );
 
-    int width;
-    mapGetWidth(&width, map);
-
     cell_t* grid = NULL;
     mapGetGrid(grid, map);
 
-    bomb_t* bomb = malloc(sizeof(bomb_t));
-    bomb->frame = BOMB_FRAME;
+	int width;
+    mapGetWidth(&width, map);
 
-    grid[y_grid + x_grid * width].bomb = bomb;
+	if(grid[x_grid + y_grid * width].bomb == NULL)
+	{
+
+    	bomb_t* bomb = malloc(sizeof(bomb_t));
+    	bomb->frame = BOMB_FRAME;
+
+    	grid[x_grid + y_grid * width].bomb = bomb;
+	}
+
     return 0;
 }

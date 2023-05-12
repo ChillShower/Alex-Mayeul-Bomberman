@@ -1,37 +1,41 @@
-#include "../include/renderer.h"
-#include "../include/player.h"
-#include "../include/event.h"
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL.h>
+//#include <SDL2/SDL_image.h>
+//#include <SDL2/SDL.h>
+#include "renderer.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
-#include <stdlib.h> 
-#include <assert.h>
-#include "../include/map.h"
+#include <stdlib.h>
+//#include <assert.h>
+//#include "map.h"
 
-int main()
-{   
-
-    //printf("la");
+int main( int argc, char* args[])
+{
+    
     /*création et initialisation fenêtre*/
-    int size=20;
-    int sprite_size=40;
+    //int size=20;
+    //int sprite_size=40;
     screen_t screen;
     initScreen(&screen);
     window_t window;
     initWindow(&screen,&window);
-    //player_t player;
+    player_t player;
     
+    SDL_Rect* rect_array = NULL;
+    grid_init(&screen, &window, rect_array, 30, 5);
+    grid_renderer_first(rect_array, &window, 30);
+    
+
+    free(rect_array);
+    /*
     map_t map;
     mapInit(&map);
     generateMap(1/2 , &map);
 
-    //playerinit(&player);
-    //player_set_texture(&player,&window,"assets/player.png");
-    /*création temporaire de l'arène */
+    playerInit(&player);
+    player_set_texture(&player,&window,"assets/player.png");
+    
     SDL_Rect rect_grid[size*size];
-    //SDL_Event e; bool quit = false; 
+    
     int grid[size*size];
     for(int i=0;i<size;i++){
         for(int j=0;j<size;j++){
@@ -42,40 +46,38 @@ int main()
     grid[size*size-1]=2;
     printf("%d",grid[0]);
     grid_init(&screen,&window,rect_grid,NULL,size,sprite_size);
-    //SDL_Texture *texture = SDL_CreateTexture(window.cur_renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,40,40);
-    
-    /*initialisation texture*/
+
     SDL_Texture* texture_block;
     texture_block=SDL_texture_init(NULL,&window,"assets/text1.png");
     SDL_SetRenderTarget(window.cur_renderer,texture_block);
-    //grid_renderer_first(rect_grid,&window,NULL,size);
+
     grid_renderer(rect_grid,&map,&window);
     SDL_Delay(4000);
-    //atexit(cleanup);
-    /*
+
+
     while(1==1){ 
         prepareScene(&window);
         
         doInput(&player);     
         
-		if (player.up)
+		if (playerPushUp(&player))
 		{
-			player.y_coord-= 4;
+			playerGoUp(&player);
 		}
 
-		if (player.down)
+		if (playerPushDown(&player))
 		{
-			player.y_coord += 4;
+			playerGoDown(&player);
 		}
 
-		if (player.left)
+		if (playerPushLeft(&player))
 		{
-			player.x_coord -= 4;
+			playerGoLeft(&player);
 		}
 
-		if (player.right)
+		if (playerPushRight(&player))
 		{
-			player.x_coord += 4;
+			playerGoRight(&player);
 		}
             
         player_rect_actualise(&player);
@@ -87,8 +89,9 @@ int main()
 		presentScene(&window);
         
     };
-        */
-    mapDestruction(&map);
+    */
+    playerDestruction(&player);
+    //mapDestruction(&map);
     destroyWindow(&window);
     return 0;
 

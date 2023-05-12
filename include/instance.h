@@ -16,6 +16,8 @@ typedef struct listPlayers{
 typedef struct instance{
     listPlayers_t listPlayers;
     map_t* map;
+    screen_t* screen;
+    window_t* window;
 } instance_t;
 
 int listPlayersInit(listPlayers_t* list);   

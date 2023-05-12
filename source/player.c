@@ -1,12 +1,14 @@
-#include "../include/player.h"
+#include "player.h"
 
 
-int getCoordx(player_t* player){
-    return player->x_coord;
+int getCoordx(int* x_coord, player_t* player){
+    *x_coord = player->x_coord;
+    return 0;
 };
 
-int getCoordy(player_t* player){
-   return player->y_coord; 
+int getCoordy(int* y_coord, player_t* player){
+    *y_coord = player->y_coord;
+    return 0;
 };
 
 int setCoordx(player_t* player,int x){
@@ -45,11 +47,14 @@ int getCasex(player_t* player){
 int getCasey(player_t* player){
     return (player->y_coord);
 }
-int playerinit(player_t* player){
+int playerInit(player_t* player){
     setCoordx(player,100);
     setCoordy(player,200);
     setHealth(player,3);
     player->speed=4;
+
+    inputs_t* inputs = malloc(sizeof(inputs_t));
+    player->inputs = inputs;
     player->inputs->up=0;
     player->inputs->down=0;
     player->inputs->left=0;
@@ -62,9 +67,40 @@ int playerinit(player_t* player){
     return 0;
 };
 
+int playerDestruction(player_t* player)
+{
+    free(player->inputs);
+    free(player->texture_player);
+    return 0;
+}
+
 int player_rect_actualise(player_t* player){
     player->hitbox.x=player->x_coord;
     player->hitbox.y=player->y_coord;
     return 0;
 };
 
+int playerPushUp(player_t* player)
+{
+    return player->inputs->up;
+}
+
+int playerPushDown(player_t* player)
+{
+    return player->inputs->down;
+}
+
+int playerPushLeft(player_t* player)
+{
+    return player->inputs->left;
+}
+
+int playerPushRight(player_t* player)
+{
+    return player->inputs->right;
+}
+
+int playerPushBomb(player_t* player)
+{
+    return player->inputs->space;
+}

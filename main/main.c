@@ -1,10 +1,10 @@
-#include "../include/renderer.h"
-#include "../include/player.h"
+#include "renderer.h"
+#include "player.h"
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
 
-int main()
+int main(int argc, char* argv[])
 {
     printf("envie de crever pas vrai?\n");
     player_t player;

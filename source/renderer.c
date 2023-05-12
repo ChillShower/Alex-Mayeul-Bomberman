@@ -1,8 +1,4 @@
-#include <renderer.h>
-#include "map.h"
-#include "param.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "../include/renderer.h"
 
 int initScreen(screen_t* screen){
     screen->width= DEFAULT_SCREEN_WIDTH;
@@ -76,93 +72,64 @@ int initSDL_Rect(SDL_Rect * pos, int x, int y, unsigned int w, unsigned int h){
 };
 
 
-int grid_init(screen_t* screen,window_t* window,SDL_Rect* rect_array, int* grille, int grid_width,int size_rect){
-    int x_fake_origin=screen->width/2-size_rect*grid_width/2;
-    int y_fake_origin=screen->height/2-size_rect*grid_width/2;
+int grid_init(screen_t* screen,SDL_Rect* rect_array, int grid_width, int grid_height, int size_rect){
+
+    int x_fake_origin= screen->width/2-size_rect*grid_width/2;
+    int y_fake_origin= screen->height/2-size_rect*grid_height/2;
     for(int i=0;i<grid_width;i++){
-        for(int j=0;j<grid_width;j++){
-            initSDL_Rect(&rect_array[i+j*grid_width],x_fake_origin+i*size_rect,y_fake_origin+j*size_rect ,size_rect,size_rect);   
+        for(int j=0;j<grid_height;j++){
+            initSDL_Rect(&(rect_array[i+j*grid_width]),x_fake_origin+i*size_rect,y_fake_origin+j*size_rect ,size_rect,size_rect);   
         };
     };
     return 0;
 
 }
 
-int grid_renderer_first(SDL_Rect* array_rect, window_t* window, int* grid, int grid_width){
+int grid_renderer_first(SDL_Rect* array_rect, window_t* window, int grid_width, int grid_height){
     SDL_SetRenderDrawColor(window->cur_renderer,255,255,255,255);
-    SDL_RenderDrawRects(window->cur_renderer,array_rect,grid_width*grid_width);
-    SDL_RenderPresent( window->cur_renderer);
+    SDL_RenderDrawRects(window->cur_renderer,array_rect,grid_width*grid_height);
     return 0;
 };
-/*
-int grid_renderer(SDL_Rect* array_rect,SDL_Texture* texture_block, window_t* window, int* grid, int grid_width){
-    //SDL_Surface* tmp= SDL_LoadBMP("../assets/text_road.bmp");
-    
-    //loadTexture(texture_block,"../assets/text1.png",window);
-    for(int i=0;i<grid_width;i++){
-        for(int j=0;j<grid_width;j++){
-        if (grid[i+j*grid_width]==0){
-            
-            //SDL_SetRenderDrawColor(window->cur_renderer,255,255,255,255);
-            draw_on_rectangle(texture_block,array_rect[i+j*grid_width],window);
-            
-        };
-       if (grid[i+j*grid_width]==1){
-            SDL_SetRenderDrawColor(window->cur_renderer,0,0,255,255);
-            SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
-        };
-        if (grid[i+j*grid_width]==2){
-            SDL_SetRenderDrawColor(window->cur_renderer,255,0,0,255);
-            SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
-        };
-            
-        };
-        //SDL_RenderPresent(window->cur_renderer);
-    };
-    //SDL_FreeSurface(tmp);
-   // SDL_free
-    
-    
-    return 0;
-};
-*/
 
 int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window){
-    
-    //printf("ici");
-    //cell_t* grid = map->grid;
+
     int grid_width;
     mapGetWidth(&grid_width, map);
+
     int grid_height;
     mapGetHeight(&grid_height, map);
+    
     wall_t wall;
     cell_t cell;
     
-
-    for(int i=0;i<grid_height;i++){
-        for(int j=0;j<grid_width;j++){
+    for(int i=0;i<grid_width;i++){
+        for(int j=0;j<grid_height;j++){
 
             cell = map->grid[i + j*grid_width];
    
             cellGetWall(&wall, &cell);
 
-            if( wall.wallstate == SOLID )
+            if( wall.wallstate == SOLID)
             {
-                //printf("ici");
                 SDL_SetRenderDrawColor(window->cur_renderer,0,0,255,255);
                 SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
             }
             else if( wall.wallstate == BRITTLE)
             {
-                printf("ici");
                 SDL_SetRenderDrawColor(window->cur_renderer,0,255,0,255);
-                SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);   
+                SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
             }
-            
+
+            else if(wall.wallstate == EMPTY)
+            {
+                SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
+                SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+            }
+   
         };
 
     };
-    
+
     return 0;
 };
 
@@ -204,3 +171,31 @@ SDL_Texture* SDL_texture_init(SDL_Texture* texture, window_t* window, char* file
     return loadTexture(texture,filename, window);
 }
 
+int getPlayerGridCoordinates(player_t* player, screen_t* screen, map_t* map, int* x, int* y)
+{
+    int x_coord;
+    getCoordx(&x_coord, player);
+
+    int y_coord;
+    getCoordy(&y_coord, player);
+
+    int screen_width;
+    screenGetWidth(&screen_width, screen);
+
+    int screen_height;
+    screenGetHeight(&screen_height, screen);
+
+    int map_width;
+    mapGetWidth(&map_width,map);
+
+    int map_height;
+    mapGetHeight(&map_height, map);
+
+    int sizeOfCell;
+    mapGetSizeOfCell(&sizeOfCell, map);
+
+    *x = x_coord - (screen_width/2 - sizeOfCell*map_width);
+    *y = y_coord - (screen_height/2 - sizeOfCell*map_height);
+
+    return 0;
+}

@@ -1,6 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
-#include "player.h"
+//#include "player.h"
+//#include "map.h"
 #include "renderer.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -36,6 +37,7 @@ int presentScene(window_t* window);
 
 // JOUEUR:
 
+int reactToKey(player_t* player, map_t* map);
 int playerGoRight(player_t* player);
 int playerGoLeft(player_t* player);
 int playerGoUp(player_t* player);

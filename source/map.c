@@ -2,15 +2,14 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 int mapInit(map_t* map){
-     map->grid = NULL;
-     map->width = 0;
-     map->height = 0;
-     map->sizeOfCell = 0;
-     return 0;
+    map->grid = malloc(DEFAULT_MAP_WIDTH * DEFAULT_MAP_HEIGHT * sizeof(cell_t));
+    map->width = DEFAULT_MAP_WIDTH;
+    map->height = DEFAULT_MAP_HEIGHT;
+    map->sizeOfCell = DEFAULT_SIZE_OF_CELL;
+    return 0;
 }
-
-
 
 int mapDestruction(map_t* map)
 {
@@ -60,10 +59,6 @@ int mapSetGrid(cell_t* grid, map_t* map){
 int generateMap(float density, map_t* map){
     srand(time(NULL)); 
 
-    //Assignation d'un nouveau tableau;
-    cell_t* grid = calloc(map->height * map->width ,sizeof(cell_t) );
-    map->grid = grid;
-
     for(int i = 0; i<map->height; ++i)
     {
         for(int j = 0; j<map->width; ++j)
@@ -84,38 +79,36 @@ int generateMap(float density, map_t* map){
             player_t* player = NULL;
             bomb_t* bomb = NULL;
             explosion_t* explosion = NULL;
-            sprite_t* sprite = NULL;
             wall_t* wall = NULL;
-
-            // Si on ne situe pas dans un coin:
-            if ( (i != 0 && i!= 1 && i != map->height-1 && i != map->height-2) || (j != 0 && j != map->width - 1))
+            
+            // Si on se situe dans un coin
+            if( (i == 0 || i == 1 || i == map->height -1 || i == map->height - 2) && ( j == 0 || j == map->width-1))
             {
-                 
-                //float r = ((float) rand() / (float) RAND_MAX);
-                float r=0;
+                wall = malloc(sizeof(wall_t));
+                *wall = (wall_t) {EMPTY, NULL};
+            }
+            // Les blocs de ligne et colonne impaires sont incassables (la map doit être de taille impaire)
+            else if ( (i % 2 == 1) && (j % 2 == 1) ){
+                wall = malloc(sizeof(wall_t));
+                *wall = (wall_t) {SOLID, NULL};
+            }
+
+            else
+            {
+                float r = ((float) rand() / (float) RAND_MAX);
 
                 if( r <= density)
                 {
-                    wallstate_t wallstate = BRITTLE;
-                    sprite = NULL;
-                    
-                    wall_t wall_object = {wallstate, sprite};
-                    wall = &wall_object;
+                    wall = malloc(sizeof(wall_t));
+                    *wall = (wall_t) {BRITTLE, NULL};
                 }
 
-            }
-            else if ( (i % 2 != 0) && (j % 2 != 0) ){
-                wallstate_t wallstate = SOLID;
-                sprite = NULL;
+                else
+                {
+                    wall = malloc(sizeof(wall_t));
+                    *wall = (wall_t) {EMPTY, NULL};
 
-                wall_t wall_object = {wallstate, sprite};
-                wall = &wall_object;
-            }
-            // Si on se situe dans un coin:
-            else
-            {
-                sprite = NULL;
-                wall = NULL;
+                }
 
             }
 
@@ -134,22 +127,22 @@ int generateMap(float density, map_t* map){
 }
 
 int cellGetPlayer(player_t* player, cell_t* cell){
-    player = cell->player;
+    *player = *cell->player;
     return 0;
 }
 
 int cellGetBomb(bomb_t* bomb, cell_t* cell){
-    bomb = cell->bomb;
+    *bomb = *cell->bomb;
     return 0;
 }
 
 int cellGetExplosion(explosion_t* explosion, cell_t* cell){
-    explosion = cell->explosion;
+    *explosion = *cell->explosion;
     return 0;
 }
 
 int cellGetWall(wall_t* wall, cell_t* cell){
-    wall = cell->wall;
+    *wall = *cell->wall;
     return 0;
 }
 
