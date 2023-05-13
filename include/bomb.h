@@ -10,11 +10,14 @@
 
 typedef struct bomb{
     int frame; // quand frame arrive à 0 -> explosion
-    sprite_t* sprite;
+    //sprite_t* sprite;
+    int state;
 
 } bomb_t;
 
-int bombInit(bomb_t* bomb);
+int bombInit(bomb_t** bomb);
 int isExploded(bomb_t* bomb);
+int bombActualise(bomb_t* bomb);
+int bombDestruction(bomb_t** bomb);
 
 #endif

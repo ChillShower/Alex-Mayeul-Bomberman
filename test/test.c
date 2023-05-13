@@ -1,3 +1,5 @@
+/*
+
 //#include <SDL2/SDL_image.h>
 //#include <SDL2/SDL.h>
 #include "renderer.h"
@@ -11,7 +13,7 @@
 int main( int argc, char* args[])
 {
     
-    /*création et initialisation fenêtre*/
+    création et initialisation fenêtre
     //int size=20;
     //int sprite_size=40;
     screen_t screen;
@@ -26,7 +28,7 @@ int main( int argc, char* args[])
     
 
     free(rect_array);
-    /*
+    
     map_t map;
     mapInit(&map);
     generateMap(1/2 , &map);
@@ -89,10 +91,86 @@ int main( int argc, char* args[])
 		presentScene(&window);
         
     };
-    */
+    
     playerDestruction(&player);
     //mapDestruction(&map);
     destroyWindow(&window);
     return 0;
 
+}
+*/
+#include<xcb/xcb.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "renderer.h"
+#include "event.h"
+
+int main( int argc, char* args[])
+{
+    //XInitThreads();
+    screen_t screen;
+    initScreen(&screen);
+
+    window_t window;
+    initWindow(&screen, &window);
+
+    SDL_Rect rectArray[DEFAULT_MAP_WIDTH*DEFAULT_MAP_HEIGHT];
+    grid_init(&screen, rectArray, DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT, DEFAULT_SIZE_OF_CELL);
+
+    map_t map;
+    mapInit(&map);
+    generateMap(0.85, &map);
+
+    player_t player;
+    playerInit(&player);
+    player_set_texture(&player,&window,"assets/player.png");
+    grid_renderer_first(rectArray, &window, DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
+    while (1)
+    {
+        prepareScene(&window);
+        
+        doInput(&player);     
+        
+		if (playerPushUp(&player))
+		{
+			playerGoUp(&player);
+		}
+
+		if (playerPushDown(&player))
+		{
+			playerGoDown(&player);
+		}
+
+		if (playerPushLeft(&player))
+		{
+			playerGoLeft(&player);
+		}
+
+		if (playerPushRight(&player))
+		{
+			playerGoRight(&player, &window);
+		}
+
+        if (playerPushBomb(&player))
+        {
+            playerPutBomb(&player, &map,&window);
+        }
+
+
+
+        grid_renderer(rectArray, &map, &window);
+        //grid_renderer_first(rectArray, &window, DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
+        draw_player(&player, &window);
+        SDL_RenderPresent( window.cur_renderer);
+        player_rect_actualise(&player);
+        gridActualisation(&player,&map);
+        SDL_Delay(10);
+
+    }
+    
+    mapDestruction(&map);
+
+    return EXIT_SUCCESS;
 }

@@ -1,5 +1,6 @@
 #include "event.h"
 
+
 void doInput(player_t* player)
 {
 	SDL_Event event;
@@ -50,7 +51,7 @@ int doKeyDown(SDL_KeyboardEvent *event,player_t* player)
 			player->inputs->right = 1;
 		}
 
-		if (event->keysym.scancode == SPACE_KEY)
+		if (event->keysym.scancode == SDL_SCANCODE_SPACE)
 		{
 			player->inputs->space = 1;
 		}
@@ -82,7 +83,7 @@ int  doKeyUp(SDL_KeyboardEvent *event,player_t* player)
 			player->inputs->right = 0;
 		}
 
-		if (event->keysym.scancode == SPACE_KEY)
+		if (event->keysym.scancode == SDL_SCANCODE_SPACE)
 		{
 			player->inputs->space = 0;
 		}
@@ -90,11 +91,11 @@ int  doKeyUp(SDL_KeyboardEvent *event,player_t* player)
     return 0;
 }
 
-int reactToKey(player_t* player, map_t* map)
+int reactToKey(player_t* player, map_t* map,window_t* window)
 {
 	if(player->inputs->right == 1)
 	{
-		playerGoRight(player);
+		playerGoRight(player,window);
 	}
 
 	if(player->inputs->left == 1)
@@ -112,7 +113,7 @@ int reactToKey(player_t* player, map_t* map)
 	}
 		if(player->inputs->space == 1)
 	{
-		playerPutBomb(player, map);
+		playerPutBomb(player, map,window);
 	}
 
 	return 0;
@@ -129,8 +130,9 @@ int presentScene(window_t* window)
 	SDL_RenderPresent(window->cur_renderer);
 	return 0;
 }
-int playerGoRight(player_t* player)
+int playerGoRight(player_t* player,window_t* window)
 {
+	//test_rectangle(window);
     player->x_coord += player->speed;
     return 0;
 }
@@ -153,27 +155,67 @@ int playerGoDown(player_t* player)
     return 0;
 }
 
-int playerPutBomb(player_t* player, map_t* map)
+int playerPutBomb(player_t* player, map_t* map,window_t* window)
 {
+	//test_rectangle(window);
     int sizeOfCell;
     mapGetSizeOfCell(&sizeOfCell, map);
-    int x_grid = (int) ( (double) player->x_coord /  (double) sizeOfCell );
-    int y_grid = (int) ( (double) player->y_coord / (double) sizeOfCell );
-
-    cell_t* grid = NULL;
-    mapGetGrid(grid, map);
+    int x_grid ;
+    int y_grid ;
+	setGridx(player);
+	setGridy(player);
+	getGridx(&x_grid,player);
+	getGridy(&y_grid,player);
+    //cell_t* grid = NULL;
+    //mapGetGrid(&grid, map);
 
 	int width;
     mapGetWidth(&width, map);
-
-	if(grid[x_grid + y_grid * width].bomb == NULL)
+	
+	if(map->grid[x_grid + y_grid * width].bomb == NULL)
 	{
-
-    	bomb_t* bomb = malloc(sizeof(bomb_t));
-    	bomb->frame = BOMB_FRAME;
-
-    	grid[x_grid + y_grid * width].bomb = bomb;
+		//bomb_t* bomb=NULL; //= malloc(sizeof(bomb_t));
+    	//bomb->frame=BOMB_FRAME;
+		bombInit(&map->grid[x_grid + y_grid * width].bomb);
+		//if(map->grid[x_grid + y_grid * width].bomb !=NULL){
+			//test_rectangle(window);
+			//bombDestruction((map->grid[x_grid + y_grid * width].bomb));
+			//map->grid[x_grid + y_grid * width].bomb=NULL;
+		//};
+		//test_rectangle(window);
+    	//grid[x_grid + y_grid * width].bomb = &bomb;
+		//test_rectangle(window);
 	}
-
     return 0;
 }
+
+
+int gridActualisation(player_t* player, map_t* map){
+	wall_t wall;
+    cell_t cell;
+    int grid_width;
+    mapGetWidth(&grid_width, map);
+
+    int grid_height;
+    mapGetHeight(&grid_height, map);
+    for(int i=0;i<grid_width;i++){
+        for(int j=0;j<grid_height;j++){
+
+            cell = map->grid[i + j*grid_width];
+            /*mur*/
+            cellGetWall(&wall, &cell);
+			if (cell.bomb !=NULL){
+				bombActualise(cell.bomb);
+                //bombDestruction(cell.bomb);
+				
+                if (isExploded(cell.bomb))
+                {
+				//SDL_Delay(10);
+                bombDestruction(&map->grid[i+j*grid_width].bomb);
+                map->grid[i+j*grid_width].bomb=NULL;
+				};
+			}
+		}
+	}
+	return 0;
+};

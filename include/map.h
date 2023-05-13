@@ -30,6 +30,8 @@ typedef struct cell{
 typedef struct map{
 
     cell_t* grid;
+    int map_coordx;
+    int map_coordy;
     int width;
     int height;
     int sizeOfCell; // en pixels

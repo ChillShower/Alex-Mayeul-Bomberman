@@ -5,6 +5,8 @@
 
 int mapInit(map_t* map){
     map->grid = malloc(DEFAULT_MAP_WIDTH * DEFAULT_MAP_HEIGHT * sizeof(cell_t));
+    map->map_coordx = DEFAULT_SCREEN_WIDTH/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_WIDTH/2;
+    map->map_coordy = DEFAULT_SCREEN_HEIGHT/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_HEIGHT/2;
     map->width = DEFAULT_MAP_WIDTH;
     map->height = DEFAULT_MAP_HEIGHT;
     map->sizeOfCell = DEFAULT_SIZE_OF_CELL;

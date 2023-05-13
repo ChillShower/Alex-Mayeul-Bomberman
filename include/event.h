@@ -37,11 +37,11 @@ int presentScene(window_t* window);
 
 // JOUEUR:
 
-int reactToKey(player_t* player, map_t* map);
-int playerGoRight(player_t* player);
+int reactToKey(player_t* player, map_t* map, window_t* window );
+int playerGoRight(player_t* player,window_t* window);
 int playerGoLeft(player_t* player);
 int playerGoUp(player_t* player);
 int playerGoDown(player_t* player);
-int playerPutBomb(player_t* player, map_t* map);
-
+int playerPutBomb(player_t* player, map_t* map, window_t* window);
+int gridActualisation(player_t* player, map_t* map);
 #endif

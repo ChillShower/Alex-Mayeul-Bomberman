@@ -11,6 +11,17 @@ int getCoordy(int* y_coord, player_t* player){
     return 0;
 };
 
+int getGridy(int* y_grid, player_t* player){
+    *y_grid=player->y_grid;
+    return 0;
+};
+
+int getGridx(int* x_grid, player_t* player){
+    
+    *x_grid = player->x_grid;
+    return 0;
+};
+
 int setCoordx(player_t* player,int x){
     player->x_coord=x;
     return 0;
@@ -18,6 +29,24 @@ int setCoordx(player_t* player,int x){
 
 int setCoordy(player_t* player,int y){
     player->y_coord=y;
+    return 0;
+};
+
+int setGridx(player_t* player){
+    int x_grid_coord= player->x_coord-(DEFAULT_SCREEN_WIDTH/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_WIDTH/2);
+    /*if (y_grid_coord<0 ||y_grid_coord>DEFAULT_MAP_WIDTH*DEFAULT_SIZE_OF_CELL){
+        return 1
+    };*/
+    player->x_grid= (int)((double)x_grid_coord/(double)DEFAULT_SIZE_OF_CELL);
+    return 0;
+};
+
+int setGridy(player_t* player){
+    int y_grid_coord= player->y_coord-(DEFAULT_SCREEN_HEIGHT/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_HEIGHT/2);
+    /*if (y_grid_coord<0 ||y_grid_coord>DEFAULT_MAP_WIDTH*DEFAULT_SIZE_OF_CELL){
+        return 1
+    };*/
+    player->y_grid = (int)((double)y_grid_coord/(double)DEFAULT_SIZE_OF_CELL);
     return 0;
 };
 
@@ -39,7 +68,7 @@ int healthAdd(player_t* player, int add){
     player->health=player->health+add;
     return 0;
 };
-
+/*
 int getCasex(player_t* player){
     return (player->x_coord);
 };
@@ -47,9 +76,10 @@ int getCasex(player_t* player){
 int getCasey(player_t* player){
     return (player->y_coord);
 }
+*/
 int playerInit(player_t* player){
-    setCoordx(player,100);
-    setCoordy(player,200);
+    setCoordx(player,DEFAULT_SCREEN_WIDTH/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_WIDTH/2);
+    setCoordy(player,DEFAULT_SCREEN_HEIGHT/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_HEIGHT/2);
     setHealth(player,3);
     player->speed=4;
 

@@ -106,9 +106,8 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window){
         for(int j=0;j<grid_height;j++){
 
             cell = map->grid[i + j*grid_width];
-   
+            /*mur*/
             cellGetWall(&wall, &cell);
-
             if( wall.wallstate == SOLID)
             {
                 SDL_SetRenderDrawColor(window->cur_renderer,0,0,255,255);
@@ -122,14 +121,34 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window){
 
             else if(wall.wallstate == EMPTY)
             {
+                //bomb_t* bomb=NULL;
+                //cellGetBomb(bomb,&cell);
+                if(cell.bomb !=NULL)
+                {
+                    test_rectangle(window);
+                    SDL_SetRenderDrawColor(window->cur_renderer,255, 182, 193,255);
+                    SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+                    //bombActualise(cell.bomb);
+                    
+                    if (isExploded(cell.bomb))
+                    {
+                      //  bombDestruction(cell.bomb);
+                    //    cell.bomb=NULL;
+                        SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
+                        SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+                    }
+                } 
+                else 
+                {
                 SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
                 SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+                
+                }
             }
    
         };
 
     };
-
     return 0;
 };
 
@@ -160,8 +179,16 @@ int player_set_texture(player_t* player,window_t* window,char* filename){
 
 int draw_player(player_t* player, window_t* window)
 {
+    //int x;
     //SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h);
     SDL_RenderCopy(window->cur_renderer, player ->texture_player, NULL, &(player->hitbox));
+    //setGridy(player);
+    //getGridy(&x,player);
+    /*if (x==0){
+    SDL_Rect rectangle={0,0,40,40};
+    SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
+    SDL_RenderFillRect(window->cur_renderer,&rectangle);
+    };*/
     return 0;
 }
 
@@ -197,5 +224,12 @@ int getPlayerGridCoordinates(player_t* player, screen_t* screen, map_t* map, int
     *x = x_coord - (screen_width/2 - sizeOfCell*map_width);
     *y = y_coord - (screen_height/2 - sizeOfCell*map_height);
 
+    return 0;
+}
+
+int test_rectangle(window_t* window){
+    SDL_Rect rectangle={0,0,40,40};
+    SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
+    SDL_RenderFillRect(window->cur_renderer,&rectangle);
     return 0;
 }

@@ -24,7 +24,7 @@ int initScreen(screen_t* screen);
 int initWindow(screen_t* screen, window_t* window);
 int destroyWindow(window_t* window);
 
-int screenGetWidth(int* width, screen_t* screen);
+int screenGetWidth(int* width, screen_t* screen);   
 int screenGetHeight(int* height, screen_t* screen);
 int screenSetWidth(int width, screen_t* screen);
 int screenSetHeight(int height, screen_t* screen);
@@ -32,7 +32,7 @@ int screenSetHeight(int height, screen_t* screen);
 //initialisation rendu:
 int initSDL_Rect(SDL_Rect * pos, int x, int y, unsigned int w, unsigned int h);
 SDL_Texture* SDL_texture_init(SDL_Texture* texture, window_t* window, char* filename);
-int grid_init(screen_t* ecran,SDL_Rect* rect_array, int width, int height, int size_rect);
+int grid_init(screen_t* ecran,SDL_Rect* rect_array,int width, int height, int size_rect);
 
 // rendu:
 int grid_renderer_first(SDL_Rect* array_rect,window_t* window, int grid_width, int grid_height);
@@ -44,4 +44,5 @@ int player_set_texture(player_t* player,window_t* window,char* filename);
 int draw_player(player_t* player, window_t* window);
 
 int getPlayerGridCoordinates(player_t* player, screen_t* screen, map_t* map, int* x, int* y);
+int test_rectangle(window_t* window);
 #endif
