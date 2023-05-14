@@ -194,8 +194,15 @@ int getPlayerGridCoordinates(player_t* player, screen_t* screen, map_t* map, int
     int sizeOfCell;
     mapGetSizeOfCell(&sizeOfCell, map);
 
-    *x = x_coord - (screen_width/2 - sizeOfCell*map_width);
-    *y = y_coord - (screen_height/2 - sizeOfCell*map_height);
+    int x_fake_origin= screen_width/2-sizeOfCell*map_width/2;
+    int y_fake_origin= screen_height/2-sizeOfCell*map_height/2;
 
-    return 0;
+    int diffx = x_coord - x_fake_origin;
+    int diffy = y_coord - y_fake_origin;
+
+    *x = diffx/sizeOfCell;
+    *y = diffy/sizeOfCell;
+
+    return (diffx <0 || diffx/sizeOfCell > map->width || diffy < 0 || diffy/sizeOfCell  > map->height);
+// Valeur de vérité : la coordonnée est-elle en dehors de la carte?
 }

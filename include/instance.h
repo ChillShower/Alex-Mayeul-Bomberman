@@ -5,7 +5,7 @@
 #include "explosion.h"
 #include "map.h"
 #include "player.h"
-#include "renderer.h"
+#include "event.h"
 
 typedef struct listPlayers{
     player_t* list;
@@ -22,4 +22,5 @@ typedef struct instance{
 
 int listPlayersInit(listPlayers_t* list);   
 int mapInstanciation(map_t* map, int width, int height, screen_t* screen);
+int playerInit(player_t* player, map_t* map, screen_t* screen);
 #endif

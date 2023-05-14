@@ -24,11 +24,11 @@ typedef struct player{
 
     inputs_t* inputs;
     SDL_Texture* texture_player;
+    int frame;
     SDL_Rect hitbox;
 }player_t;
 
 //init:
-int playerInit(player_t* player);
 int playerDestruction(player_t* player);
 
 //coord:
