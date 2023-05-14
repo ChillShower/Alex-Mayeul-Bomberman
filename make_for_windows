@@ -1,4 +1,4 @@
-CC = gcc
+xCC = gcc
 CFLAGS = -Wall -Iinclude
 
 SRC_DIR = source
@@ -19,7 +19,7 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
 test: $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o test_exec/$@.x $(TEST_DIR)/test.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	$(CC) $(CFLAGS) -o test/$@.exe $(TEST_DIR)/test.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
 test-mayeul: $(OBJ_FILES)
 	$(CC) $(CFLAGS) -o test/$@.exe $(TEST_DIR)/test-mayeul.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
@@ -28,4 +28,4 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
 clean:
-	del $(WDEL_OBJ_FILES)
+	del $(WDEL_OBJ_FILES) test_exec\test
