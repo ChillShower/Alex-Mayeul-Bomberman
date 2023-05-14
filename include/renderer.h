@@ -43,5 +43,6 @@ int player_set_texture(player_t* player,window_t* window,char* filename);
 int draw_player(player_t* player, window_t* window);
 
 int getPlayerGridCoordinates(player_t* player, screen_t* screen, map_t* map, int* x, int* y);
+int IsPlayerInMap(player_t* player, screen_t* screen, map_t* map);
 int test_rectangle(window_t* window);
 #endif

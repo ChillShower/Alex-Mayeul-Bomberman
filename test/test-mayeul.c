@@ -25,12 +25,11 @@ int main( int argc, char* args[])
     while (1)
     {
         prepareScene(&window);
-        
         doInput(&player);     
         
 		if (playerPushUp(&player) && !(smthgIsUp(&player, &map, &screen)))
 		{
-/*
+
             int x;
 	        int y;
 
@@ -39,7 +38,6 @@ int main( int argc, char* args[])
 
             printf("%d, %d\n", player.x_coord, player.y_coord);
             printf("frame:%d\n", player.frame);
-*/
         
 			playerGoUp(&player, &window);
 		}
@@ -61,15 +59,14 @@ int main( int argc, char* args[])
             
 			playerGoRight(&player, &window);
 		}
-/*
+
         if (playerPushBomb(&player))
         {
-            playerPutBomb(&player, &map);
+            playerPutBomb(&player, &map,&window);
         }
-*/
-              
+
         player_rect_actualise(&player);
-        
+        gridActualisation(&player,&map);
         grid_renderer(rectArray, &map, &window);
         grid_renderer_first(rectArray, &window, DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
         draw_player(&player, &window);

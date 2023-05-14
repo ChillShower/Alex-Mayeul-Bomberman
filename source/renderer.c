@@ -246,8 +246,40 @@ int getPlayerGridCoordinates(player_t* player, screen_t* screen, map_t* map, int
     *x = diffx/sizeOfCell;
     *y = diffy/sizeOfCell;
 
-    return (diffx <0 || diffx/sizeOfCell > map->width || diffy < 0 || diffy/sizeOfCell  > map->height);
+    return 0;
 // Valeur de vérité : la coordonnée est-elle en dehors de la carte?
+}
+
+int IsPlayerInMap(player_t* player, screen_t* screen, map_t* map)
+{
+        int x_coord;
+    getCoordx(&x_coord, player);
+
+    int y_coord;
+    getCoordy(&y_coord, player);
+
+    int screen_width;
+    screenGetWidth(&screen_width, screen);
+
+    int screen_height;
+    screenGetHeight(&screen_height, screen);
+
+    int map_width;
+    mapGetWidth(&map_width,map);
+
+    int map_height;
+    mapGetHeight(&map_height, map);
+
+    int sizeOfCell;
+    mapGetSizeOfCell(&sizeOfCell, map);
+
+    int x_fake_origin= screen_width/2-sizeOfCell*map_width/2;
+    int y_fake_origin= screen_height/2-sizeOfCell*map_height/2;
+
+    int diffx = x_coord - x_fake_origin;
+    int diffy = y_coord - y_fake_origin;
+
+    return !(diffx <0 || diffx/sizeOfCell > map->width-1 || diffy < 0 || diffy/sizeOfCell  > map->height-1);
 }
 
 int test_rectangle(window_t* window){
@@ -255,3 +287,4 @@ int test_rectangle(window_t* window){
     SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
     SDL_RenderFillRect(window->cur_renderer,&rectangle);
     return 0;
+}

@@ -99,13 +99,11 @@ int main( int argc, char* args[])
 
 }
 */
-#include<xcb/xcb.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "renderer.h"
-#include "event.h"
+#include "instance.h"
 
 int main( int argc, char* args[])
 {
@@ -124,7 +122,7 @@ int main( int argc, char* args[])
     generateMap(0.85, &map);
 
     player_t player;
-    playerInit(&player);
+    playerInit(&player,&map,&screen);
     player_set_texture(&player,&window,"assets/player.png");
     grid_renderer_first(rectArray, &window, DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
     while (1)
@@ -135,17 +133,17 @@ int main( int argc, char* args[])
         
 		if (playerPushUp(&player))
 		{
-			playerGoUp(&player);
+			playerGoUp(&player,&window);
 		}
 
 		if (playerPushDown(&player))
 		{
-			playerGoDown(&player);
+			playerGoDown(&player,&window);
 		}
 
 		if (playerPushLeft(&player))
 		{
-			playerGoLeft(&player);
+			playerGoLeft(&player,&window);
 		}
 
 		if (playerPushRight(&player))

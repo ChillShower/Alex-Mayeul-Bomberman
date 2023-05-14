@@ -39,6 +39,8 @@ int playerInit(player_t* player, map_t* map, screen_t* screen){
     player->speed=4;
 
     inputs_t* inputs = malloc(sizeof(inputs_t));
+    player->x_strength = 1;
+    player->y_strength = 1;
     player->frame = FRAME_RATE;
     player->inputs = inputs;
     player->inputs->up=0;
