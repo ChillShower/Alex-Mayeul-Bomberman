@@ -85,7 +85,7 @@ int getPlayerY_strength(int* y, player_t* player){
     *y=player->y_strength;
     return 0;
 }
-/*
+
 int getCasex(player_t* player){
     return (player->x_coord);
 };
@@ -93,28 +93,6 @@ int getCasex(player_t* player){
 int getCasey(player_t* player){
     return (player->y_coord);
 }
-*/
-int playerInit(player_t* player){
-    setCoordx(player,DEFAULT_SCREEN_WIDTH/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_WIDTH/2);
-    setCoordy(player,DEFAULT_SCREEN_HEIGHT/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_HEIGHT/2);
-    setHealth(player,3);
-    player->speed=4;
-    setPlayerX_strength(2,player);
-    setPlayerY_strength(2,player);
-
-    inputs_t* inputs = malloc(sizeof(inputs_t));
-    player->inputs = inputs;
-    player->inputs->up=0;
-    player->inputs->down=0;
-    player->inputs->left=0;
-    player->inputs->right=0;
-    player->hitbox.x=player->x_coord;
-    player->hitbox.y=player->y_coord;
-    player->hitbox.h=40;
-    player->hitbox.w=40;
-    player ->texture_player=NULL;
-    return 0;
-};
 
 int playerDestruction(player_t* player)
 {
@@ -124,8 +102,8 @@ int playerDestruction(player_t* player)
 }
 
 int player_rect_actualise(player_t* player){
-    player->hitbox.x=player->x_coord;
-    player->hitbox.y=player->y_coord;
+    player->hitbox.x=(player->x_coord - player->hitbox.w/2);
+    player->hitbox.y=(player->y_coord - player->hitbox.h/2);
     return 0;
 };
 

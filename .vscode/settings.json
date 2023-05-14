@@ -8,8 +8,12 @@
     "stdbool.h": "c",
     "map.h": "c",
     "param.h": "c",
+<<<<<<< HEAD
     "sprite.h": "c",
     "explosion.C": "cpp"
+=======
+    "instance.h": "c"
+>>>>>>> dev
   },
   "C_Cpp.errorSquiggles": "disabled",
   "C_Cpp_Runner.cCompilerPath": "gcc",

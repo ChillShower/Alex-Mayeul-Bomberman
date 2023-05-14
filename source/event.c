@@ -100,16 +100,16 @@ int reactToKey(player_t* player, map_t* map,window_t* window)
 
 	if(player->inputs->left == 1)
 	{
-		playerGoLeft(player);
+		playerGoLeft(player, window);
 	}
 
 		if(player->inputs->up == 1)
 	{
-		playerGoUp(player);
+		playerGoUp(player, window);
 	}
 		if(player->inputs->down == 1)
 	{
-		playerGoDown(player);
+		playerGoDown(player, window);
 	}
 		if(player->inputs->space == 1)
 	{
@@ -130,28 +130,105 @@ int presentScene(window_t* window)
 	SDL_RenderPresent(window->cur_renderer);
 	return 0;
 }
-int playerGoRight(player_t* player,window_t* window)
+int playerGoRight(player_t* player, window_t* window)
 {
 	//test_rectangle(window);
     player->x_coord += player->speed;
+	if( (2*FRAME_RATE/3 < player->frame) && (player->frame <=FRAME_RATE))
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/droite_1.png");
+	}
+	if( (FRAME_RATE/3< player->frame) && (player->frame <=2*FRAME_RATE/3) )
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/droite_2.png");
+	}
+
+	if( (0<=player->frame) && (player->frame <=2*FRAME_RATE/3) )
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/droite_3.png");
+	}
+	
+	player->frame = player->frame - 1;
+	if(player->frame < 0)
+	{
+		player->frame = FRAME_RATE;
+	}
     return 0;
 }
 
-int playerGoLeft(player_t* player)
+int playerGoLeft(player_t* player, window_t* window)
 {
     player->x_coord -= player->speed;
+	if( (2*FRAME_RATE/3 < player->frame) && (player->frame <=FRAME_RATE))
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/gauche_1.png");
+	}
+	if( (FRAME_RATE/3< player->frame) && (player->frame <=2*FRAME_RATE/3) )
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/gauche_2.png");
+	}
+
+	if( (0<=player->frame) && (player->frame <=2*FRAME_RATE/3) )
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/gauche_3.png");
+	}
+	
+	player->frame = player->frame - 1;
+	if(player->frame < 0)
+	{
+		player->frame = FRAME_RATE;
+	}
     return 0;
 }
 
-int playerGoUp(player_t* player)
+int playerGoUp(player_t* player, window_t* window)
 {
     player->y_coord -= player->speed;
+
+	if( (2*FRAME_RATE/3 < player->frame) && (player->frame <=FRAME_RATE))
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/haut_1.png");
+	}
+	if( (FRAME_RATE/3< player->frame) && (player->frame <=2*FRAME_RATE/3) )
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/haut_2.png");
+	}
+
+	if( (0<=player->frame) && (player->frame <=2*FRAME_RATE/3) )
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/haut_3.png");
+	}
+	
+	player->frame = player->frame - 1;
+	if(player->frame < 0)
+	{
+		player->frame = FRAME_RATE;
+	}
     return 0;
 }
 
-int playerGoDown(player_t* player)
+int playerGoDown(player_t* player, window_t* window)
 {
     player->y_coord += player->speed;
+	if( (2*FRAME_RATE/3 < player->frame) && (player->frame <=FRAME_RATE))
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/bas_1.png");
+	}
+	if( (FRAME_RATE/3< player->frame) && (player->frame <=2*FRAME_RATE/3) )
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/bas_2.png");
+	}
+
+	if( (0<=player->frame) && (player->frame <=2*FRAME_RATE/3) )
+	{
+		player_set_texture(player,window,"resources/animations/characters/bomberman/bas_3.png");
+	}
+	
+	player->frame = player->frame - 1;
+	if(player->frame < 0)
+	{
+		player->frame = FRAME_RATE;
+	}
     return 0;
 }
 
@@ -378,4 +455,95 @@ int explosionSetup(cell_t* cell, map_t* map){
 	};
 	
 	return 0;
+int smthgIsUp(player_t* player, map_t* map, screen_t* screen)
+{
+
+	player->y_coord -= player->speed;
+
+	int x;
+	int y;
+
+	if(getPlayerGridCoordinates(player, screen, map,&x, &y))
+	{
+		player->y_coord += player->speed;
+		return 1;
+	}
+	if (map->grid[x + y*map->width].bomb == NULL && map->grid[x + y*map->width].wall->wallstate == EMPTY)
+	{
+		player->y_coord += player->speed;
+		return 0;
+	}
+
+	player->y_coord += player->speed;
+
+	return 1;
+}
+int smthgIsDown(player_t* player, map_t* map, screen_t* screen)
+{
+
+	player->y_coord += player->speed;
+	int x;
+	int y;
+
+	getPlayerGridCoordinates(player, screen, map,&x, &y);
+	if(getPlayerGridCoordinates(player, screen, map,&x, &y))
+	{
+		player->y_coord -= player->speed;
+		return 1;
+	}
+	if (map->grid[x + y*map->width].bomb == NULL && map->grid[x + y*map->width].wall->wallstate == EMPTY)
+	{
+		player->y_coord -= player->speed;
+		return 0;
+	}
+
+	player->y_coord -= player->speed;
+
+	return 1;
+}
+int smthgIsLeft(player_t* player, map_t* map, screen_t* screen)
+{
+
+	player->x_coord -= player->speed;
+	int x;
+	int y;
+
+	getPlayerGridCoordinates(player, screen, map,&x, &y);
+	if(getPlayerGridCoordinates(player, screen, map,&x, &y))
+	{
+		player->x_coord += player->speed;
+		return 1;
+	}
+	if (map->grid[x + y*map->width].bomb == NULL && map->grid[x + y*map->width].wall->wallstate == EMPTY)
+	{
+		player->x_coord += player->speed;
+		return 0;
+	}
+
+	player->x_coord += player->speed;
+
+	return 1;
+}
+int smthgIsRight(player_t* player, map_t* map, screen_t* screen)
+{
+
+	player->x_coord += player->speed;
+	int x;
+	int y;
+
+	getPlayerGridCoordinates(player, screen, map,&x, &y);
+	if(getPlayerGridCoordinates(player, screen, map,&x, &y))
+	{
+		player->x_coord -= player->speed;
+		return 1;
+	}
+	if (map->grid[x + y*map->width].bomb == NULL && map->grid[x + y*map->width].wall->wallstate == EMPTY)
+	{
+		player->x_coord -= player->speed;
+		return 0;
+	}
+
+	player->x_coord -= player->speed;
+
+	return 1;
 }

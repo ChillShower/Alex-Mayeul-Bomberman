@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "map.h"
-#include "param.h"
 
 
 typedef struct screen{
