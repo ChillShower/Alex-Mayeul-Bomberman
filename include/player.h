@@ -24,6 +24,8 @@ typedef struct player{
     int y_grid;
     int speed;
     int health;
+    int x_strength;
+    int y_strength;
 /*
     int up;
     int down;
@@ -63,7 +65,10 @@ int setHealth(player_t* player, int new_health);
 int healthSubstract(player_t* player, int substract);
 
 int healthAdd(player_t* player, int add);
-
+int setPlayerX_strength(int x, player_t* player);
+int setPlayerY_strength(int y, player_t* player);
+int getPlayerX_strength(int* x, player_t* player);
+int getPlayerY_strength(int* x, player_t* player);
 //case
 /*
 int getCasex(player_t* player);

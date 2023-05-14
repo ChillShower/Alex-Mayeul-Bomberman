@@ -6,6 +6,7 @@
 #include "map.h"
 #include "player.h"
 #include "renderer.h"
+#include "event.h"
 
 typedef struct listPlayers{
     player_t* list;

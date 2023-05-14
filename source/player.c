@@ -68,6 +68,23 @@ int healthAdd(player_t* player, int add){
     player->health=player->health+add;
     return 0;
 };
+
+int setPlayerX_strength(int x, player_t* player){
+    player->x_strength=x;
+    return 0;
+}
+int setPlayerY_strength(int y, player_t* player){
+    player->y_strength=y;
+    return 0;
+}
+int getPlayerX_strength(int* x, player_t* player){
+    *x = player->x_strength;
+    return 0;
+}
+int getPlayerY_strength(int* y, player_t* player){
+    *y=player->y_strength;
+    return 0;
+}
 /*
 int getCasex(player_t* player){
     return (player->x_coord);
@@ -82,6 +99,8 @@ int playerInit(player_t* player){
     setCoordy(player,DEFAULT_SCREEN_HEIGHT/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_HEIGHT/2);
     setHealth(player,3);
     player->speed=4;
+    setPlayerX_strength(2,player);
+    setPlayerY_strength(2,player);
 
     inputs_t* inputs = malloc(sizeof(inputs_t));
     player->inputs = inputs;

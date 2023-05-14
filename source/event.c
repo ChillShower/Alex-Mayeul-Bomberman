@@ -176,9 +176,9 @@ int playerPutBomb(player_t* player, map_t* map,window_t* window)
 	{
 		//bomb_t* bomb=NULL; //= malloc(sizeof(bomb_t));
     	//bomb->frame=BOMB_FRAME;
-		bombInit(&map->grid[x_grid + y_grid * width].bomb);
+		bombInit(&map->grid[x_grid + y_grid * width].bomb,player);
 		//if(map->grid[x_grid + y_grid * width].bomb !=NULL){
-			//test_rectangle(window);
+		//test_rectangle(window);
 			//bombDestruction((map->grid[x_grid + y_grid * width].bomb));
 			//map->grid[x_grid + y_grid * width].bomb=NULL;
 		//};
@@ -211,11 +211,171 @@ int gridActualisation(player_t* player, map_t* map){
                 if (isExploded(cell.bomb))
                 {
 				//SDL_Delay(10);
-                bombDestruction(&map->grid[i+j*grid_width].bomb);
-                map->grid[i+j*grid_width].bomb=NULL;
+					//test_rectangle(window);
+					explosionSetup(&cell, map);     
+
+					bombDestruction(&map->grid[i+j*grid_width].bomb);
+                	map->grid[i+j*grid_width].bomb=NULL;
+					//explosionInit(&map->grid[i+j*grid_width].explosion);
+					
+				
+				};
+			};
+			
+			if (cell.explosion !=NULL){
+				explosionActualise(cell.explosion);
+                //bombDestruction(cell.bomb);
+				//test_rectangle(window);
+                if (explosionIsFinished(cell.explosion))
+                {
+				//SDL_Delay(10);
+				//explosionSetup(cell.bomb, map)
+
+                	explosionDestruction(&map->grid[i+j*grid_width].explosion);
+                	map->grid[i+j*grid_width].explosion=NULL;
+				
 				};
 			}
 		}
 	}
 	return 0;
 };
+
+
+int explosionSetup(cell_t* cell, map_t* map){
+	int x =cell->x_coord;
+	int y =cell->y_coord;
+	int x_power;
+	int y_power;
+	getBombX_strength(&x_power,cell->bomb);
+	getBombY_strength(&y_power,cell->bomb);
+	int grid_width;
+	mapGetWidth(&grid_width, map);
+	explosionInit((&map->grid[x+y*grid_width].explosion));
+   int grid_height;
+			/*x_case*/
+	//cell_t current_cell_right;
+	//wall_t current_wall_right;
+	//cell_t current_cell_left;
+	//wall_t map->grid[x-i+y*grid_width].wall;
+
+    mapGetHeight(&grid_height, map);
+	int condition_droite=0;
+	int condition_gauche=0;
+	for (int i=1;i<x_power+1;i++){
+
+		if(x+i>=grid_width){
+			condition_droite=1;
+		}
+		
+		if(x-i<0){
+			condition_gauche=1;
+		};
+		if (condition_droite==0){
+			//current_cell_right= map->grid[x+i+y*grid_width];
+			//cellGetWall(&current_wall_right,&current_cell_right);
+			if (map->grid[x+i+y*grid_width].wall->wallstate==SOLID){
+				condition_droite=1;
+			}
+			if (map->grid[x+i+y*grid_width].wall->wallstate ==BRITTLE){
+				map->grid[x+i+y*grid_width].wall->wallstate=EMPTY;
+			};
+			if (map->grid[x+i+y*grid_width].bomb !=NULL){
+				map->grid[x+i+y*grid_width].bomb->frame=0;
+			};
+			if (map->grid[x+i+y*grid_width].explosion !=NULL){
+				map->grid[x+i+y*grid_width].explosion->frame=EXPLOSION_FRAME;
+			};
+			if (map->grid[x+i+y*grid_width].explosion ==NULL && condition_droite==0){
+				explosionInit(&map->grid[x+i+y*grid_width].explosion);
+				map->grid[x+i+y*grid_width].explosion->frame=EXPLOSION_FRAME;
+				
+			};					
+		}
+		
+	
+		
+		if (condition_gauche==0){
+			//map->grid[x-i+y*grid_width].cell= map->grid[x-i+y*grid_width];
+			//cellGetWall(&map->grid[x-i+y*grid_width].wall,&map->grid[x-i+y*grid_width]);
+			if (map->grid[x-i+y*grid_width].wall-> wallstate==SOLID){
+				condition_gauche=1;
+			}
+			if (map->grid[x-i+y*grid_width].wall->wallstate ==BRITTLE){
+			map->grid[x-i+y*grid_width].wall->wallstate=EMPTY;
+			};
+			if (map->grid[x-i+y*grid_width].bomb !=NULL){
+				map->grid[x-i+y*grid_width].bomb->frame=0;
+			};
+			if (map->grid[x-i+y*grid_width].explosion !=NULL){
+				map->grid[x-i+y*grid_width].explosion->frame=EXPLOSION_FRAME;
+			};
+			if (map->grid[x-i+y*grid_width].explosion ==NULL && condition_gauche==0){
+				explosionInit(&map->grid[x-i+y*grid_width].explosion);
+				map->grid[x-i+y*grid_width].explosion->frame=EXPLOSION_FRAME;
+			};					
+		};
+		
+	};
+	/*y_case*/
+	//cell_t current_cell_up;
+	//wall_t current_wall_up;
+	//cell_t current_cell_down;
+	//wall_t current_wall_down;
+	
+	int condition_haut=0;
+	int condition_bas=0;
+	for (int j=1;j<y_power+1;j++){
+
+		if(y+j>=grid_height){
+			condition_haut=1;
+		}
+		
+		if(y-j<0){
+			condition_bas=1;
+		};
+		if (condition_haut==0){
+			//map->grid[x+(y+j)*grid_width]= map->grid[x+(y+j)*grid_width];
+			//cellGetWall(&map->grid[x+(y+j)*grid_width].wall,&map->grid[x+(y+j)*grid_width]);
+			if (map->grid[x+(y+j)*grid_width].wall->wallstate==SOLID){
+				condition_haut=1;
+			}
+			if (map->grid[x+(y+j)*grid_width].wall->wallstate ==BRITTLE){
+				map->grid[x+(y+j)*grid_width].wall->wallstate=EMPTY;
+			};
+			if (map->grid[x+(y+j)*grid_width].bomb !=NULL){
+				map->grid[x+(y+j)*grid_width].bomb->frame=0;
+			};
+			if (map->grid[x+(y+j)*grid_width].explosion !=NULL){
+				map->grid[x+(y+j)*grid_width].explosion->frame=EXPLOSION_FRAME;
+			};
+			if (map->grid[x+(y+j)*grid_width].explosion ==NULL && condition_haut==0){
+				explosionInit(&map->grid[x+(y+j)*grid_width].explosion);
+				map->grid[x+(y+j)*grid_width].explosion->frame=EXPLOSION_FRAME;
+			};					
+		}
+		if (condition_bas==0){
+			//current_cell_down= map->grid[x+(y-j)*grid_width];
+			//cellGetWall(&map->grid[x+(y-j)*grid_width].wall,&map->grid[x+(y-j)*grid_width]);
+			if (map->grid[x+(y-j)*grid_width].wall->wallstate==SOLID){
+				condition_bas=1;
+			}
+			if (map->grid[x+(y-j)*grid_width].wall->wallstate ==BRITTLE){
+				map->grid[x+(y-j)*grid_width].wall->wallstate=EMPTY;
+			};
+			if (map->grid[x+(y-j)*grid_width].bomb !=NULL){
+				map->grid[x+(y-j)*grid_width].bomb->frame=0;
+			};
+			if (map->grid[x+(y-j)*grid_width].explosion !=NULL){
+				map->grid[x+(y-j)*grid_width].explosion->frame=EXPLOSION_FRAME;
+			};
+			if (map->grid[x+(y-j)*grid_width].explosion ==NULL && condition_bas==0){
+				explosionInit(&map->grid[x+(y-j)*grid_width].explosion);
+				map->grid[x+(y-j)*grid_width].explosion->frame=EXPLOSION_FRAME;
+			};					
+		};
+		
+	};
+	
+	return 0;
+}

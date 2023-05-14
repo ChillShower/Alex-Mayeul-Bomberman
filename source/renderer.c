@@ -125,7 +125,7 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window){
                 //cellGetBomb(bomb,&cell);
                 if(cell.bomb !=NULL)
                 {
-                    test_rectangle(window);
+                    //test_rectangle(window);
                     SDL_SetRenderDrawColor(window->cur_renderer,255, 182, 193,255);
                     SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
                     //bombActualise(cell.bomb);
@@ -134,11 +134,27 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window){
                     {
                       //  bombDestruction(cell.bomb);
                     //    cell.bomb=NULL;
+                      //  SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
+                        SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+                    }
+                };
+                if(cell.explosion !=NULL)
+                {
+                    //test_rectangle(window);
+                    SDL_SetRenderDrawColor(window->cur_renderer,88, 41, 0,255);
+                    SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+                    //bombActualise(cell.bomb);
+                    
+                    if (explosionIsFinished(cell.explosion))
+                    {
+                      //  bombDestruction(cell.bomb);
+                    //    cell.bomb=NULL;
+                    test_rectangle(window);
                         SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
                         SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
                     }
-                } 
-                else 
+                }  
+                else if(cell.bomb==NULL && cell.explosion==NULL)
                 {
                 SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
                 SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
