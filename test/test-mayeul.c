@@ -18,64 +18,65 @@ int main( int argc, char* args[])
     mapInit(&map);
     generateMap(0.85, &map);
 
+    SDL_Texture* texturesList[30];
+    texturesListInit(texturesList, &window);
+
     player_t player;
     playerInit(&player, &map, &screen);
-    player_set_texture(&player,&window,"resources/animations/characters/bomberman/bas_1.png");
+    player_set_texture(&player,texturesList[0]);
+    grid_renderer_first(rectArray, &window, DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
 
-    while (1)
+    while (!(caseOfGameOver(&player)))
     {
         prepareScene(&window);
-        doInput(&player);     
-        
+        if(!(playerIsDead(&player)))
+        {
+            doInput(&player); 
+        }
+            
 		if (playerPushUp(&player) && !(smthgIsUp(&player, &map, &screen)))
 		{
-
-            int x;
-	        int y;
-
-	        getPlayerGridCoordinates(&player, &screen, &map,&x, &y);
-            printf("%d, %d \n", x, y);
-
-            printf("%d, %d\n", player.x_coord, player.y_coord);
-            printf("frame:%d\n", player.frame);
-        
-			playerGoUp(&player, &window);
+			playerGoUp(&player, &window, texturesList);
 		}
 
 		if (playerPushDown(&player) && !(smthgIsDown(&player, &map, &screen)))
 		{
             
-			playerGoDown(&player, &window);
+			playerGoDown(&player, &window, texturesList);
 		}
 
 		if (playerPushLeft(&player) && !(smthgIsLeft(&player, &map, &screen)))
 		{
             
-			playerGoLeft(&player, &window);
+			playerGoLeft(&player, &window, texturesList);
 		}
 
 		if (playerPushRight(&player) && !(smthgIsRight(&player, &map, &screen)))
 		{
             
-			playerGoRight(&player, &window);
+			playerGoRight(&player, &window, texturesList);
 		}
 
         if (playerPushBomb(&player))
         {
             playerPutBomb(&player, &map,&window);
         }
+        gridActualisation(&player,&map,&screen,&window, texturesList);
 
-        player_rect_actualise(&player);
-        gridActualisation(&player,&map);
-        grid_renderer(rectArray, &map, &window);
+        grid_renderer(rectArray, &map, &window, texturesList);
         grid_renderer_first(rectArray, &window, DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
+
         draw_player(&player, &window);
+
         SDL_RenderPresent( window.cur_renderer);
-        
         SDL_Delay(10);
+        
 
     }
-    
+
+    SDL_RenderCopy(window.cur_renderer, texturesList[26], NULL,NULL);
+    SDL_RenderPresent( window.cur_renderer);
+	SDL_Delay(5000);
     mapDestruction(&map);
 
     return EXIT_SUCCESS;

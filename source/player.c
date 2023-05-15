@@ -131,3 +131,8 @@ int playerPushBomb(player_t* player)
 {
     return player->inputs->space;
 }
+
+int playerIsDead(player_t* player)
+{
+    return player->health == 0;
+}

@@ -37,17 +37,19 @@ int presentScene(window_t* window);
 
 // JOUEUR:
 
-int reactToKey(player_t* player, map_t* map, window_t* window);
-int playerGoRight(player_t* player, window_t* window);
-int playerGoLeft(player_t* player, window_t* window);
-int playerGoUp(player_t* player, window_t* window);
-int playerGoDown(player_t* player, window_t* window);
+int reactToKey(player_t* player, map_t* map, window_t* window, SDL_Texture** texturesList);
+int playerGoRight(player_t* player, window_t* window, SDL_Texture** texturesList);
+int playerGoLeft(player_t* player, window_t* window, SDL_Texture** texturesList);
+int playerGoUp(player_t* player, window_t* window, SDL_Texture** texturesList);
+int playerGoDown(player_t* player, window_t* window, SDL_Texture** texturesList);
 int playerPutBomb(player_t* player, map_t* map, window_t* window);
-int gridActualisation(player_t* player, map_t* map);
+int gridActualisation(player_t* player, map_t* map, screen_t* screen, window_t* window, SDL_Texture** texturesList);
 int explosionSetup(cell_t* cell, map_t* map);
 int smthgIsUp(player_t* player, map_t* map, screen_t* screen);
 int smthgIsDown(player_t* player, map_t* map, screen_t* screen);
 int smthgIsLeft(player_t* player, map_t* map, screen_t* screen);
 int smthgIsRight(player_t* player, map_t* map, screen_t* screen);
-
+int playerReactToBomb(player_t* player);
+int playerActualise(player_t* player, window_t* window, SDL_Texture** texturesList);
+int caseOfGameOver(player_t* player);
 #endif

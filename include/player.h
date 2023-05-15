@@ -24,6 +24,8 @@ typedef struct player{
     int y_grid;
     int speed;
     int health;
+    int death; // frame de mort
+    int immuned; //frame de clignotement : prend la valeur par défaut, se décremmente, lorsque la valeur atteint 0, le joueur n'est plus immunisé
     int x_strength;
     int y_strength;
 /*
@@ -34,7 +36,7 @@ typedef struct player{
 */
     inputs_t* inputs;
     SDL_Texture* texture_player;
-    int frame;
+    int frame; // frame de déplacement
     SDL_Rect hitbox;
 }player_t;
 
@@ -83,4 +85,6 @@ int playerPushDown(player_t* player);
 int playerPushLeft(player_t* player);
 int playerPushRight(player_t* player);
 int playerPushBomb(player_t* player);
+
+int playerIsDead(player_t* player);
 #endif

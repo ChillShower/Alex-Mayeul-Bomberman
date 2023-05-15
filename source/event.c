@@ -90,25 +90,25 @@ int  doKeyUp(SDL_KeyboardEvent *event,player_t* player)
     return 0;
 }
 
-int reactToKey(player_t* player, map_t* map,window_t* window)
+int reactToKey(player_t* player, map_t* map,window_t* window, SDL_Texture** texturesList)
 {
 	if(player->inputs->right == 1)
 	{
-		playerGoRight(player,window);
+		playerGoRight(player,window, texturesList);
 	}
 
 	if(player->inputs->left == 1)
 	{
-		playerGoLeft(player, window);
+		playerGoLeft(player,window, texturesList);
 	}
 
 		if(player->inputs->up == 1)
 	{
-		playerGoUp(player, window);
+		playerGoUp(player,window, texturesList);
 	}
 		if(player->inputs->down == 1)
 	{
-		playerGoDown(player, window);
+		playerGoDown(player,window, texturesList);
 	}
 		if(player->inputs->space == 1)
 	{
@@ -129,105 +129,86 @@ int presentScene(window_t* window)
 	SDL_RenderPresent(window->cur_renderer);
 	return 0;
 }
-int playerGoRight(player_t* player, window_t* window)
+int playerGoRight(player_t* player, window_t* window, SDL_Texture** texturesList)
 {
 	//test_rectangle(window);
     player->x_coord += player->speed;
 	if( (2*PLAYER_FRAME_RATE/3 < player->frame) && (player->frame <=PLAYER_FRAME_RATE))
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/droite_1.png");
+		player_set_texture(player, texturesList[6]);
 	}
 	if( (PLAYER_FRAME_RATE/3< player->frame) && (player->frame <=2*PLAYER_FRAME_RATE/3) )
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/droite_2.png");
+		player_set_texture(player, texturesList[7]);
 	}
 
 	if( (0<=player->frame) && (player->frame <=2*PLAYER_FRAME_RATE/3) )
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/droite_3.png");
+		player_set_texture(player, texturesList[8]);
 	}
 	
-	player->frame = player->frame - 1;
-	if(player->frame < 0)
-	{
-		player->frame = PLAYER_FRAME_RATE;
-	}
     return 0;
 }
 
-int playerGoLeft(player_t* player, window_t* window)
+int playerGoLeft(player_t* player, window_t* window, SDL_Texture** texturesList)
 {
     player->x_coord -= player->speed;
 	if( (2*PLAYER_FRAME_RATE/3 < player->frame) && (player->frame <=PLAYER_FRAME_RATE))
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/gauche_1.png");
+		player_set_texture(player, texturesList[3]);
 	}
 	if( (PLAYER_FRAME_RATE/3< player->frame) && (player->frame <=2*PLAYER_FRAME_RATE/3) )
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/gauche_2.png");
+		player_set_texture(player, texturesList[4]);
 	}
 
 	if( (0<=player->frame) && (player->frame <=2*PLAYER_FRAME_RATE/3) )
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/gauche_3.png");
+		player_set_texture(player, texturesList[5]);
 	}
 	
-	player->frame = player->frame - 1;
-	if(player->frame < 0)
-	{
-		player->frame = PLAYER_FRAME_RATE;
-	}
+	
     return 0;
 }
 
-int playerGoUp(player_t* player, window_t* window)
+int playerGoUp(player_t* player, window_t* window, SDL_Texture** texturesList)
 {
     player->y_coord -= player->speed;
 
 	if( (2*PLAYER_FRAME_RATE/3 < player->frame) && (player->frame <=PLAYER_FRAME_RATE))
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/haut_1.png");
+		player_set_texture(player, texturesList[9]);
 	}
 	if( (PLAYER_FRAME_RATE/3< player->frame) && (player->frame <=2*PLAYER_FRAME_RATE/3) )
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/haut_2.png");
+		player_set_texture(player, texturesList[10]);
 	}
 
 	if( (0<=player->frame) && (player->frame <=2*PLAYER_FRAME_RATE/3) )
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/haut_3.png");
+		player_set_texture(player, texturesList[11]);
 	}
 	
-	player->frame = player->frame - 1;
-	if(player->frame < 0)
-	{
-		player->frame = PLAYER_FRAME_RATE;
-	}
     return 0;
 }
 
-int playerGoDown(player_t* player, window_t* window)
+int playerGoDown(player_t* player, window_t* window, SDL_Texture** texturesList)
 {
     player->y_coord += player->speed;
 	if( (2*PLAYER_FRAME_RATE/3 < player->frame) && (player->frame <=PLAYER_FRAME_RATE))
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/bas_1.png");
+		player_set_texture(player, texturesList[0]);
 	}
 	if( (PLAYER_FRAME_RATE/3< player->frame) && (player->frame <=2*PLAYER_FRAME_RATE/3) )
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/bas_2.png");
+		player_set_texture(player, texturesList[1]);
 	}
 
 	if( (0<=player->frame) && (player->frame <=2*PLAYER_FRAME_RATE/3) )
 	{
-		player_set_texture(player,window,"resources/animations/characters/bomberman/bas_3.png");
+		player_set_texture(player, texturesList[2]);
 	}
 	
-	player->frame = player->frame - 1;
-	if(player->frame < 0)
-	{
-		player->frame = PLAYER_FRAME_RATE;
-	}
     return 0;
 }
 
@@ -265,8 +246,7 @@ int playerPutBomb(player_t* player, map_t* map,window_t* window)
     return 0;
 }
 
-
-int gridActualisation(player_t* player, map_t* map){
+int gridActualisation(player_t* player, map_t* map, screen_t* screen, window_t* window, SDL_Texture** texturesList){
 	wall_t wall;
     cell_t cell;
     int grid_width;
@@ -274,6 +254,7 @@ int gridActualisation(player_t* player, map_t* map){
 
     int grid_height;
     mapGetHeight(&grid_height, map);
+
     for(int i=0;i<grid_width;i++){
         for(int j=0;j<grid_height;j++){
 
@@ -302,6 +283,10 @@ int gridActualisation(player_t* player, map_t* map){
 				explosionActualise(cell.explosion);
                 //bombDestruction(cell.bomb);
 				//test_rectangle(window);
+				int xGrid;
+				int yGrid;
+				getPlayerGridCoordinates(player, screen, map, &xGrid, &yGrid);
+
                 if (explosionIsFinished(cell.explosion))
                 {
 				//SDL_Delay(10);
@@ -310,10 +295,15 @@ int gridActualisation(player_t* player, map_t* map){
                 	explosionDestruction(&map->grid[i+j*grid_width].explosion);
                 	map->grid[i+j*grid_width].explosion=NULL;
 				
-				};
+				}
+				else if(xGrid == i && yGrid == j){
+					playerReactToBomb(player);
+				}
+				
 			}
 		}
 	}
+	playerActualise(player, window, texturesList);
 	return 0;
 };
 
@@ -595,4 +585,119 @@ int smthgIsRight(player_t* player, map_t* map, screen_t* screen)
 	player->x_coord -= player->speed;
 
 	return 1;
+}
+
+int playerReactToBomb(player_t* player)
+{
+	if(playerIsDead(player))
+	{
+		return 0;
+	}
+	else if (player->immuned > 0)
+	{
+		return 0;
+	}
+	else{
+		player->health -= 1;
+		player->immuned = DEFAULT_IMMUNED;
+		return 0;
+	}
+}
+
+int playerActualise(player_t* player,window_t* window, SDL_Texture** texturesList)
+{
+	if (player->immuned > 0)
+	{
+		player->immuned -= 1;
+	}
+
+	if(player->frame < 0)
+	{
+		player->frame = PLAYER_FRAME_RATE;
+	}
+
+	if(player->frame > 0)
+	{
+		player->frame -= 1;
+	}
+	
+	else
+	{
+		player->frame = PLAYER_FRAME_RATE;
+	}
+
+	if( (5*DEFAULT_IMMUNED/6 < player->immuned) && (player->immuned <=DEFAULT_IMMUNED))
+	{
+		SDL_SetTextureAlphaMod(player->texture_player, 0);
+	}
+
+	if( (4*DEFAULT_IMMUNED/6 < player->immuned) && (player->immuned <=5*DEFAULT_IMMUNED/6))
+	{
+		SDL_SetTextureAlphaMod(player->texture_player, 255);
+	}
+
+	if( (3*DEFAULT_IMMUNED/6 < player->immuned) && (player->immuned <=4*DEFAULT_IMMUNED/6))
+	{
+		SDL_SetTextureAlphaMod(player->texture_player, 0);
+	}
+
+	if( (2*DEFAULT_IMMUNED/6 < player->immuned) && (player->immuned <=3*DEFAULT_IMMUNED/6))
+	{
+		SDL_SetTextureAlphaMod(player->texture_player, 255);
+	}
+
+	if( (1*DEFAULT_IMMUNED/6 < player->immuned) && (player->immuned <=2*DEFAULT_IMMUNED/6))
+	{
+		SDL_SetTextureAlphaMod(player->texture_player, 0);
+	}
+
+	if( (0 < player->immuned) && (player->immuned <=1*DEFAULT_IMMUNED/6))
+	{
+		SDL_SetTextureAlphaMod(player->texture_player, 255);
+	}
+
+	if(player->immuned == 0)
+	{
+		SDL_SetTextureAlphaMod(player->texture_player, 255);
+	}
+
+	if(playerIsDead(player))
+	{
+		player->death = DEFAULT_DEATH;
+		player->health = -1; // le joueur est en train de mourir
+	}
+
+	if( (2*DEFAULT_DEATH/3 < player->death) && (player->death <= DEFAULT_DEATH))
+	{
+		player_set_texture(player, texturesList[23]);
+	}
+
+	if( (1*DEFAULT_DEATH/3 < player->death) && (player->death <= 2*DEFAULT_DEATH))
+	{
+		player_set_texture(player, texturesList[24]);
+	}
+
+	if( (0< player->death) && (player->death <= DEFAULT_DEATH/3))
+	{
+		player_set_texture(player, texturesList[25]);
+	}
+
+	if(player->death > 0)
+	{
+		player->death -= 1;
+	}
+
+	player_rect_actualise(player);
+
+
+	return 0;
+}
+
+int caseOfGameOver(player_t* player)
+{
+	if( (player->health == -1) && (player->death == 0))
+	{
+		return 1;
+	}
+	return 0;
 }
