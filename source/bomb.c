@@ -6,7 +6,6 @@
 int bombInit(bomb_t** bomb, player_t* player){
     bomb_t* temp_bomb= malloc(sizeof(bomb_t));
     temp_bomb->frame = BOMB_FRAME;
-   // temp_bomb->state = 0;
     temp_bomb->x_strength=player->x_strength;
     temp_bomb->y_strength=player->y_strength;
     *bomb=temp_bomb;

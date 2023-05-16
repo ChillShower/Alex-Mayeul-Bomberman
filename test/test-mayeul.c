@@ -25,42 +25,21 @@ int main( int argc, char* args[])
     playerInit(&player, &map, &screen);
     player_set_texture(&player,texturesList[0]);
     grid_renderer_first(rectArray, &window, DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
-
+    int lastKey = 10;
     while (!(caseOfGameOver(&player)))
     {
+        returnToRestPose(&player,lastKey,texturesList);
         prepareScene(&window);
         if(!(playerIsDead(&player)))
         {
             doInput(&player); 
         }
-            
-		if (playerPushUp(&player) && !(smthgIsUp(&player, &map, &screen)))
-		{
-			playerGoUp(&player, &window, texturesList);
-		}
-
-		if (playerPushDown(&player) && !(smthgIsDown(&player, &map, &screen)))
-		{
-            
-			playerGoDown(&player, &window, texturesList);
-		}
-
-		if (playerPushLeft(&player) && !(smthgIsLeft(&player, &map, &screen)))
-		{
-            
-			playerGoLeft(&player, &window, texturesList);
-		}
-
-		if (playerPushRight(&player) && !(smthgIsRight(&player, &map, &screen)))
-		{
-            
-			playerGoRight(&player, &window, texturesList);
-		}
-
-        if (playerPushBomb(&player))
+        else
         {
-            playerPutBomb(&player, &map,&window);
+            playerResetInputs(&player);
         }
+            
+		reactToKey(&player,&map,&window,&screen,texturesList,&lastKey);
         gridActualisation(&player,&map,&screen,&window, texturesList);
 
         grid_renderer(rectArray, &map, &window, texturesList);

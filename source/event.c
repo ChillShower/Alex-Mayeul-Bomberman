@@ -50,7 +50,7 @@ int doKeyDown(SDL_KeyboardEvent *event,player_t* player)
 			player->inputs->right = 1;
 		}
 
-		if (event->keysym.scancode == SDL_SCANCODE_SPACE)
+		if (event->keysym.scancode == SPACE_KEY)
 		{
 			player->inputs->space = 1;
 		}
@@ -82,7 +82,7 @@ int  doKeyUp(SDL_KeyboardEvent *event,player_t* player)
 			player->inputs->right = 0;
 		}
 
-		if (event->keysym.scancode == SDL_SCANCODE_SPACE)
+		if (event->keysym.scancode == SPACE_KEY)
 		{
 			player->inputs->space = 0;
 		}
@@ -90,31 +90,56 @@ int  doKeyUp(SDL_KeyboardEvent *event,player_t* player)
     return 0;
 }
 
-int reactToKey(player_t* player, map_t* map,window_t* window, SDL_Texture** texturesList)
+int reactToKey(player_t* player, map_t* map,window_t* window,screen_t* screen, SDL_Texture** texturesList, int* lastKey)
 {
-	if(player->inputs->right == 1)
+	if(playerPushRight(player) && !(smthgIsRight(player, map, screen)))
 	{
 		playerGoRight(player,window, texturesList);
+		*lastKey = RIGHT_KEY;
 	}
 
-	if(player->inputs->left == 1)
+	if(playerPushLeft(player) && !(smthgIsLeft(player, map, screen)))
 	{
 		playerGoLeft(player,window, texturesList);
+		*lastKey = LEFT_KEY;
 	}
 
-		if(player->inputs->up == 1)
+	if(playerPushUp(player) && !(smthgIsUp(player, map, screen)))
 	{
 		playerGoUp(player,window, texturesList);
+		*lastKey = UP_KEY;
 	}
-		if(player->inputs->down == 1)
+	if(playerPushDown(player) && !(smthgIsDown(player, map, screen)))
 	{
 		playerGoDown(player,window, texturesList);
+		*lastKey = DOWN_KEY;
 	}
-		if(player->inputs->space == 1)
+	if(playerPushBomb(player))
 	{
 		playerPutBomb(player, map,window);
+		*lastKey = SPACE_KEY;
 	}
 
+	return 0;
+}
+
+int returnToRestPose(player_t* player, int lastKey, SDL_Texture** texturesList)
+{
+	switch(lastKey)
+	{
+		case RIGHT_KEY:
+			player_set_texture(player, texturesList[6]);
+			break;
+		case LEFT_KEY:
+			player_set_texture(player, texturesList[5]);
+			break;
+		case UP_KEY:
+			player_set_texture(player, texturesList[9]);
+			break;
+		case DOWN_KEY:
+			player_set_texture(player, texturesList[0]);
+			break;
+	}
 	return 0;
 }
 
@@ -131,7 +156,6 @@ int presentScene(window_t* window)
 }
 int playerGoRight(player_t* player, window_t* window, SDL_Texture** texturesList)
 {
-	//test_rectangle(window);
     player->x_coord += player->speed;
 	if( (2*PLAYER_FRAME_RATE/3 < player->frame) && (player->frame <=PLAYER_FRAME_RATE))
 	{
@@ -214,7 +238,6 @@ int playerGoDown(player_t* player, window_t* window, SDL_Texture** texturesList)
 
 int playerPutBomb(player_t* player, map_t* map,window_t* window)
 {
-	//test_rectangle(window);
     int sizeOfCell;
     mapGetSizeOfCell(&sizeOfCell, map);
     int x_grid ;
@@ -223,25 +246,13 @@ int playerPutBomb(player_t* player, map_t* map,window_t* window)
 	setGridy(player);
 	getGridx(&x_grid,player);
 	getGridy(&y_grid,player);
-    //cell_t* grid = NULL;
-    //mapGetGrid(&grid, map);
 
 	int width;
     mapGetWidth(&width, map);
 	
 	if(map->grid[x_grid + y_grid * width].bomb == NULL)
 	{
-		//bomb_t* bomb=NULL; //= malloc(sizeof(bomb_t));
-    	//bomb->frame=BOMB_FRAME;
 		bombInit(&map->grid[x_grid + y_grid * width].bomb,player);
-		//if(map->grid[x_grid + y_grid * width].bomb !=NULL){
-		//test_rectangle(window);
-			//bombDestruction((map->grid[x_grid + y_grid * width].bomb));
-			//map->grid[x_grid + y_grid * width].bomb=NULL;
-		//};
-		//test_rectangle(window);
-    	//grid[x_grid + y_grid * width].bomb = &bomb;
-		//test_rectangle(window);
 	}
     return 0;
 }
@@ -259,21 +270,17 @@ int gridActualisation(player_t* player, map_t* map, screen_t* screen, window_t* 
         for(int j=0;j<grid_height;j++){
 
             cell = map->grid[i + j*grid_width];
-            /*mur*/
             cellGetWall(&wall, &cell);
 			if (cell.bomb !=NULL){
 				bombActualise(cell.bomb);
-                //bombDestruction(cell.bomb);
+
 				
                 if (isExploded(cell.bomb))
                 {
-				//SDL_Delay(10);
-					//test_rectangle(window);
 					explosionSetup(&cell, map);     
 
 					bombDestruction(&map->grid[i+j*grid_width].bomb);
                 	map->grid[i+j*grid_width].bomb=NULL;
-					//explosionInit(&map->grid[i+j*grid_width].explosion);
 					
 				
 				};
@@ -281,17 +288,12 @@ int gridActualisation(player_t* player, map_t* map, screen_t* screen, window_t* 
 			
 			if (cell.explosion !=NULL){
 				explosionActualise(cell.explosion);
-                //bombDestruction(cell.bomb);
-				//test_rectangle(window);
 				int xGrid;
 				int yGrid;
 				getPlayerGridCoordinates(player, screen, map, &xGrid, &yGrid);
 
                 if (explosionIsFinished(cell.explosion))
                 {
-				//SDL_Delay(10);
-				//explosionSetup(cell.bomb, map)
-
                 	explosionDestruction(&map->grid[i+j*grid_width].explosion);
                 	map->grid[i+j*grid_width].explosion=NULL;
 				
@@ -319,11 +321,6 @@ int explosionSetup(cell_t* cell, map_t* map){
 	mapGetWidth(&grid_width, map);
 	explosionInit((&map->grid[x+y*grid_width].explosion));
    int grid_height;
-			/*x_case*/
-	//cell_t current_cell_right;
-	//wall_t current_wall_right;
-	//cell_t current_cell_left;
-	//wall_t map->grid[x-i+y*grid_width].wall;
 
     mapGetHeight(&grid_height, map);
 	int condition_droite=0;
@@ -338,8 +335,6 @@ int explosionSetup(cell_t* cell, map_t* map){
 			condition_gauche=1;
 		};
 		if (condition_droite==0){
-			//current_cell_right= map->grid[x+i+y*grid_width];
-			//cellGetWall(&current_wall_right,&current_cell_right);
 			if (map->grid[x+i+y*grid_width].wall->wallstate==SOLID){
 				condition_droite=1;
 			}
@@ -362,8 +357,6 @@ int explosionSetup(cell_t* cell, map_t* map){
 	
 		
 		if (condition_gauche==0){
-			//map->grid[x-i+y*grid_width].cell= map->grid[x-i+y*grid_width];
-			//cellGetWall(&map->grid[x-i+y*grid_width].wall,&map->grid[x-i+y*grid_width]);
 			if (map->grid[x-i+y*grid_width].wall-> wallstate==SOLID){
 				condition_gauche=1;
 			}
@@ -383,12 +376,7 @@ int explosionSetup(cell_t* cell, map_t* map){
 		};
 		
 	};
-	/*y_case*/
-	//cell_t current_cell_up;
-	//wall_t current_wall_up;
-	//cell_t current_cell_down;
-	//wall_t current_wall_down;
-	
+
 	int condition_haut=0;
 	int condition_bas=0;
 	for (int j=1;j<y_power+1;j++){
@@ -401,8 +389,6 @@ int explosionSetup(cell_t* cell, map_t* map){
 			condition_bas=1;
 		};
 		if (condition_haut==0){
-			//map->grid[x+(y+j)*grid_width]= map->grid[x+(y+j)*grid_width];
-			//cellGetWall(&map->grid[x+(y+j)*grid_width].wall,&map->grid[x+(y+j)*grid_width]);
 			if (map->grid[x+(y+j)*grid_width].wall->wallstate==SOLID){
 				condition_haut=1;
 			}
@@ -421,8 +407,6 @@ int explosionSetup(cell_t* cell, map_t* map){
 			};					
 		}
 		if (condition_bas==0){
-			//current_cell_down= map->grid[x+(y-j)*grid_width];
-			//cellGetWall(&map->grid[x+(y-j)*grid_width].wall,&map->grid[x+(y-j)*grid_width]);
 			if (map->grid[x+(y-j)*grid_width].wall->wallstate==SOLID){
 				condition_bas=1;
 			}

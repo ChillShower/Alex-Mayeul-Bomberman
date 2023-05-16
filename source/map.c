@@ -124,7 +124,6 @@ int generateMap(float density, map_t* map){
             
         }
     }
-    //printf("la");
     return 0;
 }
 

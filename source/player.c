@@ -34,18 +34,12 @@ int setCoordy(player_t* player,int y){
 
 int setGridx(player_t* player){
     int x_grid_coord= player->x_coord-(DEFAULT_SCREEN_WIDTH/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_WIDTH/2);
-    /*if (y_grid_coord<0 ||y_grid_coord>DEFAULT_MAP_WIDTH*DEFAULT_SIZE_OF_CELL){
-        return 1
-    };*/
     player->x_grid= (int)((double)x_grid_coord/(double)DEFAULT_SIZE_OF_CELL);
     return 0;
 };
 
 int setGridy(player_t* player){
     int y_grid_coord= player->y_coord-(DEFAULT_SCREEN_HEIGHT/2-DEFAULT_SIZE_OF_CELL*DEFAULT_MAP_HEIGHT/2);
-    /*if (y_grid_coord<0 ||y_grid_coord>DEFAULT_MAP_WIDTH*DEFAULT_SIZE_OF_CELL){
-        return 1
-    };*/
     player->y_grid = (int)((double)y_grid_coord/(double)DEFAULT_SIZE_OF_CELL);
     return 0;
 };
@@ -130,6 +124,16 @@ int playerPushRight(player_t* player)
 int playerPushBomb(player_t* player)
 {
     return player->inputs->space;
+}
+
+int playerResetInputs(player_t* player)
+{
+    player->inputs->up = 0;
+    player->inputs->down = 0;
+    player->inputs->left = 0;
+    player->inputs->right = 0;
+    player->inputs->space = 0;
+    return 0;
 }
 
 int playerIsDead(player_t* player)

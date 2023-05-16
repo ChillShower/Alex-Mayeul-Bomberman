@@ -28,12 +28,6 @@ typedef struct player{
     int immuned; //frame de clignotement : prend la valeur par défaut, se décremmente, lorsque la valeur atteint 0, le joueur n'est plus immunisé
     int x_strength;
     int y_strength;
-/*
-    int up;
-    int down;
-    int left;
-    int right;
-*/
     inputs_t* inputs;
     SDL_Texture* texture_player;
     int frame; // frame de déplacement
@@ -71,11 +65,6 @@ int setPlayerX_strength(int x, player_t* player);
 int setPlayerY_strength(int y, player_t* player);
 int getPlayerX_strength(int* x, player_t* player);
 int getPlayerY_strength(int* x, player_t* player);
-//case
-/*
-int getCasex(player_t* player);
-int getCasey(player_t* player);
-*/
 int player_rect_actualise(player_t* player);
 
 // Actions:
@@ -85,6 +74,7 @@ int playerPushDown(player_t* player);
 int playerPushLeft(player_t* player);
 int playerPushRight(player_t* player);
 int playerPushBomb(player_t* player);
+int playerResetInputs(player_t* player);
 
 int playerIsDead(player_t* player);
 #endif

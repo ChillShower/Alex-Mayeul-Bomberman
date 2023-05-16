@@ -18,13 +18,13 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -g -c $< -o $@ `sdl2-config --cflags --libs` -lSDL2_image -lxcb
 
 test: $(OBJ_FILES)
-	$(CC) $(CFLAGS) -g -o test_exec/$@ $(TEST_DIR)/test.c $(OBJ_FILES) `sdl2-config --cflags --libs` -lSDL2_image -lxcb
+	$(CC) $(CFLAGS) -g -o $(TEST_DIR)/$@ $(TEST_DIR)/test.c $(OBJ_FILES) `sdl2-config --cflags --libs` -lSDL2_image -lxcb
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -g -c $< -o $@ `sdl2-config --cflags --libs` -lSDL2_image -lxcb
 
 test-mayeul: $(OBJ_FILES)
-	$(CC) $(CFLAGS) -g -o test_exec/$@ $(TEST_DIR)/test-mayeul.c $(OBJ_FILES) `sdl2-config --cflags --libs` -lSDL2_image -lxcb
+	$(CC) $(CFLAGS) -g -o $(TEST_DIR)/$@ $(TEST_DIR)/test-mayeul.c $(OBJ_FILES) `sdl2-config --cflags --libs` -lSDL2_image -lxcb
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -g -c $< -o $@ `sdl2-config --cflags --libs` -lSDL2_image -lxcb
@@ -36,7 +36,7 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -g -c $< -o $@ `sdl2-config --cflags --libs` -lSDL2_image -lxcb
 
 clean:
-	rm -f $(OBJ_FILES) my_executable test_exec/test
+	rm -f $(OBJ_FILES) my_executable $(TEST_DIR)/test
 =======
 CC = gcc
 CFLAGS = -Wall -Iinclude

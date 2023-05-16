@@ -1,7 +1,5 @@
 #ifndef EVENT_H
 #define EVENT_H
-//#include "player.h"
-//#include "map.h"
 #include "renderer.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -24,7 +22,7 @@ ESPACE: Poser une bombe
 #define DOWN_KEY SDL_SCANCODE_DOWN
 #define LEFT_KEY SDL_SCANCODE_LEFT
 #define RIGHT_KEY SDL_SCANCODE_RIGHT
-#define SPACE_KEY SDL_SCANCODE_KP_SPACE
+#define SPACE_KEY SDL_SCANCODE_SPACE
 
 /*__________________________________________*/
 
@@ -37,7 +35,7 @@ int presentScene(window_t* window);
 
 // JOUEUR:
 
-int reactToKey(player_t* player, map_t* map, window_t* window, SDL_Texture** texturesList);
+int reactToKey(player_t* player, map_t* map, window_t* window, screen_t* screen, SDL_Texture** texturesList, int* lastKey);
 int playerGoRight(player_t* player, window_t* window, SDL_Texture** texturesList);
 int playerGoLeft(player_t* player, window_t* window, SDL_Texture** texturesList);
 int playerGoUp(player_t* player, window_t* window, SDL_Texture** texturesList);
@@ -52,4 +50,5 @@ int smthgIsRight(player_t* player, map_t* map, screen_t* screen);
 int playerReactToBomb(player_t* player);
 int playerActualise(player_t* player, window_t* window, SDL_Texture** texturesList);
 int caseOfGameOver(player_t* player);
+int returnToRestPose(player_t* player, int lastKey, SDL_Texture** texturesList);
 #endif

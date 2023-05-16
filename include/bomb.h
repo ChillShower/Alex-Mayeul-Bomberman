@@ -11,8 +11,6 @@
 
 typedef struct bomb{
     int frame; // quand frame arrive à 0 -> explosion
-    //sprite_t* sprite;
-    //int state;
     int x_strength;
     int y_strength;
 

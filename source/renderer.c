@@ -37,10 +37,10 @@ int initWindow(screen_t* screen,window_t* window){
 
 int destroyWindow(window_t* window){
     
-    //Destroy window
+
     SDL_DestroyWindow( window->cur_window );
     SDL_DestroyRenderer(window ->cur_renderer);
-    //Quit SDL subsystems
+
     SDL_Quit();
     return 0;
 };
@@ -122,16 +122,12 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window, SDL_Textur
 
             else if(wall.wallstate == EMPTY)
             {
-                //bomb_t* bomb=NULL;
-                //cellGetBomb(bomb,&cell);
+
                 if(cell.bomb !=NULL)
                 {
-                    //test_rectangle(window);
-                    //SDL_SetRenderDrawColor(window->cur_renderer,255, 182, 193,255);
-                    //SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+
                     if( (2*BOMB_FRAME/3 < cell.bomb->frame) && (cell.bomb->frame <=BOMB_FRAME))
 	                {
-                        printf("OUI\n");
 		                SDL_RenderCopy(window->cur_renderer, texturesList[13], NULL,&array_rect[i+j*grid_width]);
 	                }
 	                if( (BOMB_FRAME/3< cell.bomb->frame) && (cell.bomb->frame <=2*BOMB_FRAME/3) )
@@ -143,30 +139,22 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window, SDL_Textur
 	                {
 		                SDL_RenderCopy(window->cur_renderer, texturesList[15], NULL,&array_rect[i+j*grid_width]);
 	                }
-                    //bombActualise(cell.bomb);
+
                     
                     if (isExploded(cell.bomb))
                     {
-                      //  bombDestruction(cell.bomb);
-                    //    cell.bomb=NULL;
-                      //  SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
+
                         SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
                     }
-                    //bombActualise(cell.bomb);
+
                     
                     if (isExploded(cell.bomb))
                     {
-                      //  bombDestruction(cell.bomb);
-                    //    cell.bomb=NULL;
-                      //  SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
                         SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
                     }
                 };
                 if(cell.explosion !=NULL)
                 {
-                    //test_rectangle(window);
-                    //SDL_SetRenderDrawColor(window->cur_renderer,88, 41, 0,255);
-                    //SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
 
                         if( (6*EXPLOSION_FRAME/7<=cell.explosion->frame) && (cell.explosion->frame <=7*EXPLOSION_FRAME/7) )
 	                    {
@@ -196,13 +184,9 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window, SDL_Textur
 	                    {
 		                    SDL_RenderCopy(window->cur_renderer, texturesList[22], NULL,&array_rect[i+j*grid_width]);
 	                    }
-                    //SDL_RenderCopy(window->cur_renderer, texturesList[16], NULL,&array_rect[i+j*grid_width]);
-                    //bombActualise(cell.bomb);
                     
                     if (explosionIsFinished(cell.explosion))
                     {
-                      //  bombDestruction(cell.bomb);
-                    //    cell.bomb=NULL;
                     test_rectangle(window);
                         SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
                         SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
@@ -240,25 +224,13 @@ int draw_on_rectangle(SDL_Texture * texture,SDL_Rect rectangle,window_t* window)
 }
 
 int player_set_texture(player_t* player,SDL_Texture* texture){
-    
-    //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
 	player->texture_player = texture;
     return 0;
 };
 
 int draw_player(player_t* player, window_t* window)
 {
-    //int x;
-    //SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h);
     SDL_RenderCopy(window->cur_renderer, player ->texture_player, NULL, &(player->hitbox));
-    
-    //setGridy(player);
-    //getGridy(&x,player);
-    /*if (x==0){
-    SDL_Rect rectangle={0,0,40,40};
-    SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
-    SDL_RenderFillRect(window->cur_renderer,&rectangle);
-    };*/
     return 0;
 }
 
