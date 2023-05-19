@@ -22,6 +22,7 @@ typedef struct instance{
 
 int listPlayersInit(listPlayers_t* list);
 int mapInstanciation(map_t* map, int width, int height, screen_t* screen);
-int playerInit(player_t* player, map_t* map, screen_t* screen);
+int playerInit(player_t* player, int id, map_t* map, screen_t* screen, SDL_Texture** texturesList);
 int texturesListInit(SDL_Texture** texturesList, window_t* window);
+int texturesListDestroy(SDL_Texture** texturesList);
 #endif

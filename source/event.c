@@ -1,6 +1,14 @@
 #include "event.h"
 
-void doInput(player_t* player)
+// CONTROLS PARAMETERS:
+
+const int UP_KEY[4] = {SDL_SCANCODE_UP, SDL_SCANCODE_W, SDL_SCANCODE_2, SDL_SCANCODE_7};
+const int DOWN_KEY[4] = {SDL_SCANCODE_DOWN,SDL_SCANCODE_S, SDL_SCANCODE_3,SDL_SCANCODE_8};
+const int LEFT_KEY[4] = {SDL_SCANCODE_LEFT, SDL_SCANCODE_A, SDL_SCANCODE_1, SDL_SCANCODE_6};
+const int RIGHT_KEY[4] = {SDL_SCANCODE_RIGHT,SDL_SCANCODE_D, SDL_SCANCODE_4,SDL_SCANCODE_9};
+const int SPACE_KEY[4] = {SDL_SCANCODE_SPACE,SDL_SCANCODE_X, SDL_SCANCODE_5,SDL_SCANCODE_0};
+
+void doInput(player_t* listOfPlayers, int numberOfPlayers, int* pause)
 {
 	SDL_Event event;
 
@@ -11,80 +19,199 @@ void doInput(player_t* player)
 			case SDL_QUIT:
 				exit(0);
 				break;
-
 			case SDL_KEYDOWN:
-				doKeyDown(&event.key, player);
+			
+				doKeyDown(&event.key, listOfPlayers, numberOfPlayers);
 				break;
 
 			case SDL_KEYUP:
-				doKeyUp(&event.key,player);
+				inPause(&event.key, pause);
+				doKeyUp(&event.key,listOfPlayers, numberOfPlayers);
 				break;
 
 			default:
 				break;
 		}
 	}
+	
 }
 
-int doKeyDown(SDL_KeyboardEvent *event,player_t* player)
+int inPause(SDL_KeyboardEvent* event, int* pause)
 {
+	if(event->repeat == 0)
+	{
+		if(event->keysym.scancode == SDL_SCANCODE_ESCAPE)
+		{
+			if (*pause == 1)
+			{
+				*pause = 0;
+			}
+			else if(*pause == 0)
+			{
+				*pause =1;
+			}
+		}
+	}
+	return 0;
+	
+}
+
+void doMouse(SDL_Rect* listOfButtons, buttonstate_t** listOfReactions, int numberOfButtons)
+{
+	SDL_Event event;
+
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+			case SDL_QUIT:
+				exit(0);
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				
+				clickOnButton(listOfButtons, listOfReactions,&event, numberOfButtons);
+				break;
+
+			default:
+
+				mouseOnButton(listOfButtons,listOfReactions, &event, numberOfButtons);
+				break;
+		}
+	}
+	
+}
+
+int mouseOnButton(SDL_Rect* listOfButtons, buttonstate_t** listOfReactions, SDL_Event* event, int numberOfButtons)
+{
+	for(int i = 0; i< numberOfButtons; ++i)
+	{
+	int xPos = listOfButtons[i].x;
+    int yPos = listOfButtons[i].y;
+    int width = listOfButtons[i].w;
+    int height= listOfButtons[i].h;
+
+	if ((xPos <= event->button.x &&event->button.x <= xPos + width) && (yPos <= event->button.y &&event->button.y <= yPos + height))
+	{
+		*listOfReactions[i] = ON;
+	}
+	else
+	{
+		*listOfReactions[i] = NONE;
+	}
+	}
+	return 0;
+}
+
+int clickOnButton(SDL_Rect* listOfButtons,buttonstate_t** listOfReactions, SDL_Event* event, int numberOfButtons)
+{
+	for(int i = 0; i< numberOfButtons; ++i)
+	{
+	int xPos = listOfButtons[i].x;
+    int yPos = listOfButtons[i].y;
+    int width = listOfButtons[i].w;
+    int height= listOfButtons[i].h;
+
+	if ((xPos <= event->button.x &&event->button.x <= xPos + width) && (yPos <= event->button.y &&event->button.y <= yPos + height))
+	{
+		*listOfReactions[i] = CLICKED;
+		return 1;
+	}
+	}
+	return 0;
+}
+
+int colorReactionToMouse(buttonstate_t reaction,SDL_Color* color)
+{
+	if(reaction == CLICKED)
+    {
+        color->r = 255;
+        color->g = 0;
+        color->b = 0;
+       	color->a = 255;
+    }
+    if(reaction == ON)
+    {
+        color->r = 0;
+        color->g = 0;
+        color->b = 255;
+        color->a = 255;
+    }
+    if(reaction == NONE)
+    {
+       	color->r = 255;
+        color->g = 255;
+        color->b = 255;
+        color->a = 255;
+    }
+	return 0;
+}
+
+int doKeyDown(SDL_KeyboardEvent *event,player_t* listOfPlayers, int numberOfPlayers)
+{
+	
 	if (event->repeat == 0)
 	{
-		if (event->keysym.scancode == UP_KEY)
+		for(int i = 0; i<numberOfPlayers; ++i)
 		{
-			player->inputs->up = 1;
+		if (event->keysym.scancode == UP_KEY[listOfPlayers[i].id])
+		{
+			listOfPlayers[i].inputs->up = 1;
 		}
 
-		if (event->keysym.scancode == DOWN_KEY)
+		if (event->keysym.scancode == DOWN_KEY[listOfPlayers[i].id])
 		{
-			player->inputs->down = 1;
+			listOfPlayers[i].inputs->down = 1;
 		}
 
-		if (event->keysym.scancode == LEFT_KEY)
+		if (event->keysym.scancode == LEFT_KEY[listOfPlayers[i].id])
 		{
-			player->inputs->left = 1;
+			listOfPlayers[i].inputs->left = 1;
 		}
 
-		if (event->keysym.scancode == RIGHT_KEY)
+		if (event->keysym.scancode == RIGHT_KEY[listOfPlayers[i].id])
 		{
-			player->inputs->right = 1;
+			listOfPlayers[i].inputs->right = 1;
 		}
 
-		if (event->keysym.scancode == SPACE_KEY)
+		if (event->keysym.scancode == SPACE_KEY[listOfPlayers[i].id])
 		{
-			player->inputs->space = 1;
+			listOfPlayers[i].inputs->space = 1;
+		}
 		}
 	}
     return 0;
 }
 
-int  doKeyUp(SDL_KeyboardEvent *event,player_t* player)
+int  doKeyUp(SDL_KeyboardEvent *event,player_t* listOfPlayers, int numberOfPlayers)
 {
 	if (event->repeat == 0)
 	{
-		if (event->keysym.scancode == UP_KEY)
+		for(int i = 0; i<numberOfPlayers; ++i)
 		{
-			player->inputs->up = 0;
+		if (event->keysym.scancode == UP_KEY[listOfPlayers[i].id])
+		{
+			listOfPlayers[i].inputs->up = 0;
 		}
 
-		if (event->keysym.scancode == DOWN_KEY)
+		if (event->keysym.scancode == DOWN_KEY[listOfPlayers[i].id])
 		{
-			player->inputs->down = 0;
+			listOfPlayers[i].inputs->down = 0;
 		}
 
-		if (event->keysym.scancode == LEFT_KEY)
+		if (event->keysym.scancode == LEFT_KEY[listOfPlayers[i].id])
 		{
-			player->inputs->left = 0;
+			listOfPlayers[i].inputs->left = 0;
 		}
 
-		if (event->keysym.scancode == RIGHT_KEY)
+		if (event->keysym.scancode == RIGHT_KEY[listOfPlayers[i].id])
 		{
-			player->inputs->right = 0;
+			listOfPlayers[i].inputs->right = 0;
 		}
 
-		if (event->keysym.scancode == SPACE_KEY)
+		if (event->keysym.scancode == SPACE_KEY[listOfPlayers[i].id])
 		{
-			player->inputs->space = 0;
+			listOfPlayers[i].inputs->space = 0;
+		}
 		}
 	}
     return 0;
@@ -95,29 +222,29 @@ int reactToKey(player_t* player, map_t* map,window_t* window,screen_t* screen, S
 	if(playerPushRight(player) && !(smthgIsRight(player, map, screen)))
 	{
 		playerGoRight(player,window, texturesList);
-		*lastKey = RIGHT_KEY;
+		*lastKey = RIGHT_KEY[player->id];
 	}
 
 	if(playerPushLeft(player) && !(smthgIsLeft(player, map, screen)))
 	{
 		playerGoLeft(player,window, texturesList);
-		*lastKey = LEFT_KEY;
+		*lastKey = LEFT_KEY[player->id];
 	}
 
 	if(playerPushUp(player) && !(smthgIsUp(player, map, screen)))
 	{
 		playerGoUp(player,window, texturesList);
-		*lastKey = UP_KEY;
+		*lastKey = UP_KEY[player->id];
 	}
 	if(playerPushDown(player) && !(smthgIsDown(player, map, screen)))
 	{
 		playerGoDown(player,window, texturesList);
-		*lastKey = DOWN_KEY;
+		*lastKey = DOWN_KEY[player->id];
 	}
 	if(playerPushBomb(player))
 	{
 		playerPutBomb(player, map,window);
-		*lastKey = SPACE_KEY;
+		*lastKey = SPACE_KEY[player->id];
 	}
 
 	return 0;
@@ -125,21 +252,23 @@ int reactToKey(player_t* player, map_t* map,window_t* window,screen_t* screen, S
 
 int returnToRestPose(player_t* player, int lastKey, SDL_Texture** texturesList)
 {
-	switch(lastKey)
+	if(lastKey == RIGHT_KEY[player->id])
 	{
-		case RIGHT_KEY:
-			player_set_texture(player, texturesList[6]);
-			break;
-		case LEFT_KEY:
-			player_set_texture(player, texturesList[5]);
-			break;
-		case UP_KEY:
-			player_set_texture(player, texturesList[9]);
-			break;
-		case DOWN_KEY:
-			player_set_texture(player, texturesList[0]);
-			break;
+		player_set_texture(player, texturesList[6]);
 	}
+	if(lastKey == LEFT_KEY[player->id])
+	{
+		player_set_texture(player, texturesList[5]);
+	}
+	if(lastKey == UP_KEY[player->id])
+	{
+		player_set_texture(player, texturesList[9]);
+	}
+	if(lastKey == DOWN_KEY[player->id])
+	{
+		player_set_texture(player, texturesList[0]);
+	}
+
 	return 0;
 }
 
@@ -153,6 +282,28 @@ int presentScene(window_t* window)
 {
 	SDL_RenderPresent(window->cur_renderer);
 	return 0;
+}
+
+
+void showEscapeMenu(window_t* window, screen_t* screen, SDL_Texture** texturesList, TTF_Font* police)
+{
+    char* textPause = "PAUSE";
+    int width = screen->width/4;
+    int height = screen->height/4;
+    int xPos = screen->width/2 - width/2;
+    int yPos = 1*screen->height/3;
+    SDL_Rect buttonPause;
+    buttonPause.x =xPos;
+    buttonPause.y = yPos;
+    buttonPause.w = width;
+    buttonPause.h = height;
+
+    SDL_Color colorPause = {255, 255, 255, 255};
+
+    showButton(window, screen, texturesList, &buttonPause, police, textPause, colorPause);
+
+    SDL_RenderPresent(window->cur_renderer);
+    SDL_Delay(10);
 }
 int playerGoRight(player_t* player, window_t* window, SDL_Texture** texturesList)
 {
@@ -257,7 +408,7 @@ int playerPutBomb(player_t* player, map_t* map,window_t* window)
     return 0;
 }
 
-int gridActualisation(player_t* player, map_t* map, screen_t* screen, window_t* window, SDL_Texture** texturesList){
+int gridActualisation(map_t* map, screen_t* screen, window_t* window, SDL_Texture** texturesList){
 	wall_t wall;
     cell_t cell;
     int grid_width;
@@ -288,26 +439,29 @@ int gridActualisation(player_t* player, map_t* map, screen_t* screen, window_t* 
 			
 			if (cell.explosion !=NULL){
 				explosionActualise(cell.explosion);
-				int xGrid;
-				int yGrid;
-				getPlayerGridCoordinates(player, screen, map, &xGrid, &yGrid);
 
                 if (explosionIsFinished(cell.explosion))
                 {
                 	explosionDestruction(&map->grid[i+j*grid_width].explosion);
                 	map->grid[i+j*grid_width].explosion=NULL;
 				
-				}
-				else if(xGrid == i && yGrid == j){
-					playerReactToBomb(player);
-				}
 				
+			}
 			}
 		}
 	}
-	playerActualise(player, window, texturesList);
 	return 0;
 };
+
+int playerReactToStar(player_t* player, cell_t* cell)
+{
+	player->x_strength += 1;
+	player->y_strength += 1;
+
+	cell->wall->wallstate = EMPTY;
+
+	return 0;
+}
 
 
 int explosionSetup(cell_t* cell, map_t* map){
@@ -453,7 +607,7 @@ int smthgIsUp(player_t* player, map_t* map, screen_t* screen)
 		player->y_coord += player->speed;
 		return 1;
 	}
-	if (map->grid[x + y*map->width].bomb == NULL && map->grid[x + y*map->width].wall->wallstate == EMPTY)
+	if ((map->grid[x + y*map->width].bomb == NULL) && (!(map->grid[x + y*map->width].wall->wallstate == SOLID ) && !(map->grid[x + y*map->width].wall->wallstate == BRITTLE )))
 	{
 		player->y_coord += player->speed;
 		return 0;
@@ -488,7 +642,7 @@ int smthgIsDown(player_t* player, map_t* map, screen_t* screen)
 		player->y_coord -= player->speed;
 		return 1;
 	}
-	if (map->grid[x + y*map->width].bomb == NULL && map->grid[x + y*map->width].wall->wallstate == EMPTY)
+	if ((map->grid[x + y*map->width].bomb == NULL) && (!(map->grid[x + y*map->width].wall->wallstate == SOLID ) && !(map->grid[x + y*map->width].wall->wallstate == BRITTLE )))
 	{
 		player->y_coord -= player->speed;
 		return 0;
@@ -524,7 +678,7 @@ int smthgIsLeft(player_t* player, map_t* map, screen_t* screen)
 		player->x_coord += player->speed;
 		return 1;
 	}
-	if (map->grid[x + y*map->width].bomb == NULL && map->grid[x + y*map->width].wall->wallstate == EMPTY)
+	if ((map->grid[x + y*map->width].bomb == NULL) && (!(map->grid[x + y*map->width].wall->wallstate == SOLID ) && !(map->grid[x + y*map->width].wall->wallstate == BRITTLE )))
 	{
 		player->x_coord += player->speed;
 		return 0;
@@ -560,7 +714,7 @@ int smthgIsRight(player_t* player, map_t* map, screen_t* screen)
 		player->x_coord -= player->speed;
 		return 1;
 	}
-	if (map->grid[x + y*map->width].bomb == NULL && map->grid[x + y*map->width].wall->wallstate == EMPTY)
+	if ((map->grid[x + y*map->width].bomb == NULL) && (!(map->grid[x + y*map->width].wall->wallstate == SOLID ) && !(map->grid[x + y*map->width].wall->wallstate == BRITTLE )))
 	{
 		player->x_coord -= player->speed;
 		return 0;
@@ -588,8 +742,41 @@ int playerReactToBomb(player_t* player)
 	}
 }
 
-int playerActualise(player_t* player,window_t* window, SDL_Texture** texturesList)
+int playerActualise(player_t* player, map_t* map, screen_t* screen, window_t* window, SDL_Texture** texturesList)
 {
+	cell_t cell;
+	int grid_width;
+    mapGetWidth(&grid_width, map);
+
+    int grid_height;
+    mapGetHeight(&grid_height, map);
+
+    for(int i=0;i<grid_width;i++){
+        for(int j=0;j<grid_height;j++){
+			cell = map->grid[i + j*grid_width];
+
+			if (cell.explosion !=NULL){
+				int xGrid;
+				int yGrid;
+				getPlayerGridCoordinates(player, screen, map, &xGrid, &yGrid);
+				if(xGrid == i && yGrid == j){
+					playerReactToBomb(player);
+				}
+			}
+
+			if (cell.wall->wallstate == STAR)
+			{
+				int xGrid;
+				int yGrid;
+				getPlayerGridCoordinates(player, screen, map, &xGrid, &yGrid);
+				if(xGrid == i && yGrid == j){
+					playerReactToStar(player, &map->grid[i+j*grid_width]);
+				}
+			}
+
+		}
+	}
+
 	if (player->immuned > 0)
 	{
 		player->immuned -= 1;
@@ -609,6 +796,8 @@ int playerActualise(player_t* player,window_t* window, SDL_Texture** texturesLis
 	{
 		player->frame = PLAYER_FRAME_RATE;
 	}
+
+	/* ANIMATION IMMUNE:*/
 
 	if( (5*DEFAULT_IMMUNED/6 < player->immuned) && (player->immuned <=DEFAULT_IMMUNED))
 	{
@@ -639,6 +828,8 @@ int playerActualise(player_t* player,window_t* window, SDL_Texture** texturesLis
 	{
 		SDL_SetTextureAlphaMod(player->texture_player, 255);
 	}
+
+	/* FIN */
 
 	if(player->immuned == 0)
 	{
@@ -671,17 +862,26 @@ int playerActualise(player_t* player,window_t* window, SDL_Texture** texturesLis
 		player->death -= 1;
 	}
 
+	if(player->death == 0 && player->health == -1)
+	{
+		player_set_texture(player, texturesList[25]);
+	}
 	player_rect_actualise(player);
 
 
 	return 0;
 }
 
-int caseOfGameOver(player_t* player)
+int caseOfGameOver(player_t* player, int numberOfPlayers)
 {
-	if( (player->health == -1) && (player->death == 0))
+	int numberOfDeaths= 0;
+	for(int i = 0; i<numberOfPlayers; ++i)
 	{
-		return 1;
+		if( (player[i].health == -1) && (player[i].death == 0))
+		{
+			numberOfDeaths += 1;
+		}
 	}
-	return 0;
+	
+	return numberOfDeaths == numberOfPlayers - 1;
 }

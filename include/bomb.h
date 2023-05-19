@@ -4,7 +4,7 @@
 #include "param.h"
 #include "player.h"
 
-#define BOMB_DURATION  3
+#define BOMB_DURATION  5
 #define BOMB_FRAME (FRAME_RATE*BOMB_DURATION)
 
 #include <sprite.h>

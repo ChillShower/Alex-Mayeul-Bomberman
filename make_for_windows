@@ -13,19 +13,19 @@ WDEL_OBJ_FILES = $(patsubst $(SRC_DIR)/%.o, $(SRC_DIR)\\%.o, $(OBJ_FILES))
 all: main
 
 game: $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $@ $(MAIN_DIR)/main.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	$(CC) $(CFLAGS) -o $@ $(MAIN_DIR)/main.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	$(CC) $(CFLAGS) -c $< -o $@ -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
 test: $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o test/$@.exe $(TEST_DIR)/test.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	$(CC) $(CFLAGS) -o test/$@.exe $(TEST_DIR)/test.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
 test-mayeul: $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o test/$@.exe $(TEST_DIR)/test-mayeul.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	$(CC) $(CFLAGS) -o test/$@.exe $(TEST_DIR)/test-mayeul.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	$(CC) $(CFLAGS) -c $< -o $@ -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
 clean:
 	del $(WDEL_OBJ_FILES)

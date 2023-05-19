@@ -8,7 +8,7 @@
 #include <string.h>
 #include "sprite.h"
 
-
+/* les contrôles prennent la valeur 1 si la touche est activée 0 sinon */
 typedef struct inputs{
     int up;
     int down;
@@ -18,20 +18,42 @@ typedef struct inputs{
 } inputs_t;
 
 typedef struct player{
+
+    /* le numéro du joueur*/
+    int id;
+
+    /* coordonnées pixels du joueur*/
     int x_coord;
     int y_coord;
+
+    /* coordonnées dans la grille de carte*/
     int x_grid;
     int y_grid;
+
+    /* attributs */
     int speed;
     int health;
-    int death; // frame de mort
-    int immuned; //frame de clignotement : prend la valeur par défaut, se décremmente, lorsque la valeur atteint 0, le joueur n'est plus immunisé
     int x_strength;
     int y_strength;
+
+    /* numero de l'image d'animation de mort */
+    int death;
+
+    /* numero de l'image d'animation de mort immunité (clignotement) : prend la valeur par défaut, se décremmente, lorsque la valeur atteint 0, le joueur n'est plus immunisé */
+    int immuned;
+
+    /* activation ou désactivation des touches de contrôle du joueur */
     inputs_t* inputs;
+
+    /* image du joueur à l'écran et taille de l'image à l'écran*/
     SDL_Texture* texture_player;
-    int frame; // frame de déplacement
     SDL_Rect hitbox;
+    SDL_Rect idBox;
+    SDL_Color color;
+
+    /* numero de l'image de l'animation de déplacement */
+    int frame;
+    
 }player_t;
 
 //init:

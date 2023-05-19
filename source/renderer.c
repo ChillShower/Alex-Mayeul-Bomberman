@@ -32,6 +32,12 @@ int initWindow(screen_t* screen,window_t* window){
             return 1;
         }
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+
+    if(TTF_Init() < 0){
+	fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+	exit(EXIT_FAILURE);
+    }
+
     return 0;
 };
 
@@ -91,7 +97,7 @@ int grid_renderer_first(SDL_Rect* array_rect, window_t* window, int grid_width, 
     return 0;
 };
 
-int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window, SDL_Texture** texturesList){
+int grid_renderer(screen_t* screen, SDL_Rect* array_rect, map_t* map, window_t* window, SDL_Texture** texturesList){
 
     int grid_width;
     mapGetWidth(&grid_width, map);
@@ -115,9 +121,11 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window, SDL_Textur
             }
             else if( wall.wallstate == BRITTLE)
             {
-                SDL_SetRenderDrawColor(window->cur_renderer,0,255,0,255);
-                SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
                 SDL_RenderCopy(window->cur_renderer, texturesList[12], NULL,&array_rect[i+j*grid_width]);
+            }
+            else if( wall.wallstate == STAR)
+            {
+                SDL_RenderCopy(window->cur_renderer, texturesList[27], NULL,&array_rect[i+j*grid_width]);
             }
 
             else if(wall.wallstate == EMPTY)
@@ -187,7 +195,6 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window, SDL_Textur
                     
                     if (explosionIsFinished(cell.explosion))
                     {
-                    test_rectangle(window);
                         SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
                         SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
                     }
@@ -203,9 +210,43 @@ int grid_renderer(SDL_Rect* array_rect, map_t* map, window_t* window, SDL_Textur
         };
 
     };
+    
     return 0;
 };
 
+int playerShowUI(player_t* player, window_t* window,SDL_Texture** texturesList, TTF_Font* police)
+{
+        // AFFICHAGE DE L'UI:
+    SDL_Rect numberRect;
+    char str[2];
+    sprintf(str, "%d", player->id);
+    SDL_Surface * surf = TTF_RenderText_Solid(police, str, player->color);
+    SDL_Texture* text = SDL_CreateTextureFromSurface(window->cur_renderer, surf);
+    initSDL_Rect(&numberRect,2*DEFAULT_SIZE_OF_HEART/3,player->id*DEFAULT_SIZE_OF_HEART + 2*DEFAULT_SIZE_OF_HEART/3 ,DEFAULT_SIZE_OF_HEART/2,DEFAULT_SIZE_OF_HEART/2);
+
+    if(player->health > 0)
+    {
+        SDL_Rect UI[player->health+1];
+        initSDL_Rect(&(UI[0]),0,player->id*DEFAULT_SIZE_OF_HEART ,DEFAULT_SIZE_OF_HEART,DEFAULT_SIZE_OF_HEART);
+        SDL_RenderCopy(window->cur_renderer, texturesList[42], NULL, &UI[0]);
+        SDL_RenderCopy(window->cur_renderer, text,NULL, &numberRect);
+
+        SDL_DestroyTexture(text);
+        for(int i = 1; i< player->health+1; ++i)
+        {
+            initSDL_Rect(&(UI[i]),i*DEFAULT_SIZE_OF_HEART,player->id*DEFAULT_SIZE_OF_HEART ,DEFAULT_SIZE_OF_HEART,DEFAULT_SIZE_OF_HEART);
+            SDL_RenderCopy(window->cur_renderer, texturesList[40], NULL, &UI[i]);
+        }
+    }
+    if(player->health < 0)
+    {
+        SDL_Rect UI[1];
+        initSDL_Rect(&(UI[0]),0,player->id*DEFAULT_SIZE_OF_HEART ,DEFAULT_SIZE_OF_HEART,DEFAULT_SIZE_OF_HEART);
+        SDL_RenderCopy(window->cur_renderer, texturesList[43], NULL, &UI[0]);
+        SDL_RenderCopy(window->cur_renderer, text,NULL, &numberRect);
+    }
+    return 0;
+}
 
 SDL_Texture* loadTexture(SDL_Texture *texture,char *filename, window_t* window)
 {
@@ -216,28 +257,60 @@ SDL_Texture* loadTexture(SDL_Texture *texture,char *filename, window_t* window)
    
 	return texture_block;
 }
-int draw_on_rectangle(SDL_Texture * texture,SDL_Rect rectangle,window_t* window)
-{
-    SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h);
-    SDL_RenderCopy(window->cur_renderer, texture, NULL, &rectangle);
-    return 0;
-}
 
 int player_set_texture(player_t* player,SDL_Texture* texture){
 	player->texture_player = texture;
     return 0;
 };
 
-int draw_player(player_t* player, window_t* window)
+int draw_player(player_t* player, window_t* window, TTF_Font* police)
 {
+    char str[2];
+    sprintf(str, "%d", player->id);
+    SDL_Surface * surf = TTF_RenderText_Solid(police, str, player->color);
+    SDL_Texture* text = SDL_CreateTextureFromSurface(window->cur_renderer, surf);
+    SDL_RenderCopy(window->cur_renderer, text, NULL, &(player->idBox));
     SDL_RenderCopy(window->cur_renderer, player ->texture_player, NULL, &(player->hitbox));
     return 0;
 }
 
-
-SDL_Texture* SDL_texture_init(SDL_Texture* texture, window_t* window, char* filename)
+int showButton(window_t* window, screen_t* screen, SDL_Texture** texturesList, SDL_Rect* buttonHitbox, TTF_Font* font, char* text, SDL_Color color)
 {
-    return loadTexture(texture,filename, window);
+    int xPos = buttonHitbox->x;
+    int yPos = buttonHitbox->y;
+    int width = buttonHitbox->w;
+    int height= buttonHitbox->h;
+
+    SDL_Rect buttonBackground;
+    buttonBackground.w = width;
+    buttonBackground.h = height;
+    buttonBackground.x = xPos;
+    buttonBackground.y = yPos;
+
+    SDL_Texture* texture_target = SDL_CreateTexture(window->cur_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, buttonBackground.w, buttonBackground.h);
+    SDL_SetTextureBlendMode(texture_target, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderTarget(window->cur_renderer, texture_target);
+
+    SDL_Texture* buttonBackgroundTexture = NULL;
+    buttonBackgroundTexture = texturesList[41];
+    SDL_RenderCopy(window->cur_renderer, buttonBackgroundTexture, NULL, NULL);
+
+    SDL_Rect textBox;
+    textBox.w = buttonBackground.w/2;
+    textBox.h = 2*buttonBackground.h/3;
+    textBox.x = buttonBackground.w/4;
+    textBox.y = buttonBackground.h/4;
+
+    SDL_Surface * textSurf = TTF_RenderText_Solid(font, text, color);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(window->cur_renderer, textSurf);
+    SDL_RenderCopy(window->cur_renderer, textTexture, NULL, &textBox);
+
+    SDL_SetRenderTarget(window->cur_renderer, NULL);
+    SDL_RenderCopy(window->cur_renderer, texture_target, NULL, &buttonBackground);
+
+    SDL_DestroyTexture(texture_target);
+    SDL_DestroyTexture(textTexture);
+    return 0;
 }
 
 int getPlayerGridCoordinates(player_t* player, screen_t* screen, map_t* map, int* x, int* y)
@@ -306,11 +379,4 @@ int IsPlayerInMap(player_t* player, screen_t* screen, map_t* map)
     int diffy = y_coord - y_fake_origin;
 
     return !(diffx <0 || diffx/sizeOfCell > map->width-1 || diffy < 0 || diffy/sizeOfCell  > map->height-1);
-}
-
-int test_rectangle(window_t* window){
-    SDL_Rect rectangle={0,0,40,40};
-    SDL_SetRenderDrawColor(window->cur_renderer,0,0,0,255);
-    SDL_RenderFillRect(window->cur_renderer,&rectangle);
-    return 0;
 }

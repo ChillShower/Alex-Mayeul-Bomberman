@@ -7,7 +7,7 @@
 #include "sprite.h"
 #include "param.h"
 
-typedef enum wallstate{BRITTLE, SOLID, EMPTY} wallstate_t;
+typedef enum wallstate{BRITTLE, SOLID, EMPTY, STAR} wallstate_t;
 
 typedef struct wall{
 
@@ -40,7 +40,7 @@ typedef struct map{
 
 int mapInit(map_t* map);
 int mapDestruction(map_t* map);
-int generateMap(float density, map_t* map);
+int generateMap(float density, float bonus, map_t* map);
 
 int mapGetWidth(int* width, map_t* map);
 int mapGetHeight(int* height, map_t* map);

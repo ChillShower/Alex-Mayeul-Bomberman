@@ -15,6 +15,17 @@ int mapInit(map_t* map){
 
 int mapDestruction(map_t* map)
 {
+    for(int i = 0; i<map->height; ++i)
+    {
+        for(int j = 0; j<map->width; ++j)
+        {
+            free(map->grid[j + i*map->width].wall->sprite);
+            free(map->grid[j + i*map->width].wall);
+            free(map->grid[j + i*map->width].player);
+            free(map->grid[j + i*map->width].bomb);
+            free(map->grid[j + i*map->width].explosion);
+        }
+    }
     free(map->grid);
     return 0;
 }
@@ -58,7 +69,7 @@ int mapSetGrid(cell_t* grid, map_t* map){
     map->grid = grid;
     return 0;
 }
-int generateMap(float density, map_t* map){
+int generateMap(float density, float bonus, map_t* map){
     srand(time(NULL)); 
 
     for(int i = 0; i<map->height; ++i)
@@ -89,6 +100,11 @@ int generateMap(float density, map_t* map){
                 wall = malloc(sizeof(wall_t));
                 *wall = (wall_t) {EMPTY, NULL};
             }
+            else if( (i == 0 || i == map->height-1) && (j == 1 || j == map->width -2))
+            {
+                wall = malloc(sizeof(wall_t));
+                *wall = (wall_t) {EMPTY, NULL};
+            }
             // Les blocs de ligne et colonne impaires sont incassables (la map doit être de taille impaire)
             else if ( (i % 2 == 1) && (j % 2 == 1) ){
                 wall = malloc(sizeof(wall_t));
@@ -99,7 +115,12 @@ int generateMap(float density, map_t* map){
             {
                 float r = ((float) rand() / (float) RAND_MAX);
 
-                if( r <= density)
+                if (r <= bonus)
+                {
+                    wall = malloc(sizeof(wall_t));
+                    *wall = (wall_t) {STAR, NULL};
+                }
+                else if( r <= density)
                 {
                     wall = malloc(sizeof(wall_t));
                     *wall = (wall_t) {BRITTLE, NULL};

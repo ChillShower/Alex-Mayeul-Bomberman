@@ -98,6 +98,8 @@ int playerDestruction(player_t* player)
 int player_rect_actualise(player_t* player){
     player->hitbox.x=(player->x_coord - player->hitbox.w/2);
     player->hitbox.y=(player->y_coord - player->hitbox.h/2);
+    player->idBox.x=(player->x_coord - player->hitbox.w/2 + player->idBox.h/4);
+    player->idBox.y= (player->y_coord - 3*player->hitbox.h/2 + player->idBox.w/2);
     return 0;
 };
 
