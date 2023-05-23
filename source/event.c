@@ -349,7 +349,7 @@ int playerGoLeft(player_t* player, window_t* window, SDL_Texture** texturesList)
 int playerGoUp(player_t* player, window_t* window, SDL_Texture** texturesList)
 {
     player->y_coord -= player->speed;
-
+	
 	if( (2*PLAYER_FRAME_RATE/3 < player->frame) && (player->frame <=PLAYER_FRAME_RATE))
 	{
 		player_set_texture(player, texturesList[9]);
@@ -359,7 +359,7 @@ int playerGoUp(player_t* player, window_t* window, SDL_Texture** texturesList)
 		player_set_texture(player, texturesList[10]);
 	}
 
-	if( (0<=player->frame) && (player->frame <=2*PLAYER_FRAME_RATE/3) )
+	if( (0<=player->frame) && (player->frame <=PLAYER_FRAME_RATE/3) )
 	{
 		player_set_texture(player, texturesList[11]);
 	}
@@ -782,20 +782,15 @@ int playerActualise(player_t* player, map_t* map, screen_t* screen, window_t* wi
 		player->immuned -= 1;
 	}
 
-	if(player->frame < 0)
+	if(player->frame <= 0)
 	{
 		player->frame = PLAYER_FRAME_RATE;
 	}
-
-	if(player->frame > 0)
+	else
 	{
 		player->frame -= 1;
 	}
 	
-	else
-	{
-		player->frame = PLAYER_FRAME_RATE;
-	}
 
 	/* ANIMATION IMMUNE:*/
 

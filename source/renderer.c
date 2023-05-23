@@ -154,13 +154,13 @@ int grid_renderer(screen_t* screen, SDL_Rect* array_rect, map_t* map, window_t* 
                     if (isExploded(cell.bomb))
                     {
 
-                        SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+                        //SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
                     }
 
                     
                     if (isExploded(cell.bomb))
                     {
-                        SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
+                        //SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
                     }
                 };
                 if(cell.explosion !=NULL)
