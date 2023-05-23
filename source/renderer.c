@@ -108,6 +108,8 @@ int grid_renderer(screen_t* screen, SDL_Rect* array_rect, map_t* map, window_t* 
     wall_t wall;
     cell_t cell;
     
+    SDL_SetRenderDrawColor(window->cur_renderer, 0,0,0,255);
+    SDL_RenderFillRects(window->cur_renderer, array_rect, grid_width*grid_height);
     for(int i=0;i<grid_width;i++){
         for(int j=0;j<grid_height;j++){
 

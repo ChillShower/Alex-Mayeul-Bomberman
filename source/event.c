@@ -727,7 +727,7 @@ int smthgIsRight(player_t* player, map_t* map, screen_t* screen)
 
 int playerReactToBomb(player_t* player)
 {
-	if(playerIsDead(player))
+	if(player->health <= 0)
 	{
 		return 0;
 	}

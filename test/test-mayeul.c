@@ -46,13 +46,9 @@ int main( int argc, char* args[])
 /* LANCEMENT DU MENU : */
     while((reactionPlay != CLICKED) && (reactionQuit != CLICKED))
     {
-        prepareScene(&window);
-    SDL_Rect titre;
-    titre.h = titleHeight;
-    titre.w = titleWidth;
-    titre.x = 1*screen.width/8;
-    titre.y = 0;
-    SDL_RenderCopy(window.cur_renderer, title, NULL,NULL);//&titre);
+        
+    prepareScene(&window);
+    SDL_RenderCopy(window.cur_renderer, title, NULL,NULL);
 
     char* textPlay = "Jouer";
     char* textQuit = "Quitter";

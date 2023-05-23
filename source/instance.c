@@ -75,8 +75,9 @@ int playerInit(player_t* player, int id, map_t* map, screen_t* screen, SDL_Textu
     player->inputs->down=0;
     player->inputs->left=0;
     player->inputs->right=0;
-    player->hitbox.h=60;
-    player->hitbox.w=60;
+    player->inputs->space=0;
+    player->hitbox.h=2*DEFAULT_SIZE_OF_CELL/3;
+    player->hitbox.w=2*DEFAULT_SIZE_OF_CELL/3;
     player->hitbox.x=(player->x_coord - player->hitbox.w/2);
     player->hitbox.y=(player->y_coord - player->hitbox.h/2);
     player->idBox.h=40;
@@ -111,10 +112,11 @@ int texturesListInit(SDL_Texture** texturesList, window_t* window)
     texturesList[12] = IMG_LoadTexture(window->cur_renderer, "resources/static/wall/wall_brittle.png");
 
 // BOMB:
-
-    texturesList[13] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/bomb_1.png");
+    texturesList[13] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/bomb_3.png");
     texturesList[14] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/bomb_2.png");
-    texturesList[15] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/bomb_3.png");
+    texturesList[15] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/bomb_1.png");
+    
+   
 
 // EXPLOSION:
     texturesList[16] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/explosion_1.png");
