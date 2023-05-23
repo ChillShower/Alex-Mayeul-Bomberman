@@ -1,5 +1,13 @@
 #include "player.h"
 
+/*
+    En s'inspirant de la programmation orientée objet
+    nous nous sommes inspirés des getters et setters en Java.
+    Pendant le déroulement du projet, nous nous sommes rendu compte
+    que cela nous faisait perdre beaucoup de temps et avons choisi de les
+    abandonner plus tard.
+
+*/
 
 int getCoordx(int* x_coord, player_t* player){
     *x_coord = player->x_coord;
@@ -95,6 +103,7 @@ int playerDestruction(player_t* player)
     return 0;
 }
 
+/* MISE A JOUR DU RECTANGLE DE HITBOX DU JOUEUR */
 int player_rect_actualise(player_t* player){
     player->hitbox.x=(player->x_coord - player->hitbox.w/2);
     player->hitbox.y=(player->y_coord - player->hitbox.h/2);
@@ -103,6 +112,7 @@ int player_rect_actualise(player_t* player){
     return 0;
 };
 
+/* PRESSION DES TOUCHES */
 int playerPushUp(player_t* player)
 {
     return player->inputs->up;

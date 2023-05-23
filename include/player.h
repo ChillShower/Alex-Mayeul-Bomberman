@@ -8,11 +8,12 @@
 #include <string.h>
 #include "sprite.h"
 
-/* les contrôles prennent la valeur 1 si la touche est activée 0 sinon */
+/* les contrôles prennent la valeur 1
+si la touche est activée 0 sinon */
 typedef struct inputs{
     int up;
     int down;
-    int left;
+    int left;   
     int right;
     int space;
 } inputs_t;

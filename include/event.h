@@ -16,7 +16,11 @@ int doKeyUp(SDL_KeyboardEvent *event,player_t* listOfPlayers, int numberOfPlayer
 void doMouse(SDL_Rect* buttonHitbox,buttonstate_t** listOfReactions, int numberOfButtons);
 int clickOnButton(SDL_Rect* buttonHitbox,buttonstate_t** listOfReactions, SDL_Event* event, int numberOfButtons);
 int mouseOnButton(SDL_Rect* buttonHitbox,buttonstate_t** listOfReactions, SDL_Event* event, int numberOfButtons);
+
+
 int colorReactionToMouse(buttonstate_t reaction,SDL_Color* color);
+
+
 void showEscapeMenu(window_t* window, screen_t* screen, SDL_Texture** texturesList, TTF_Font* fon);
 int prepareScene(window_t* window);
 int presentScene(window_t* window);

@@ -1,12 +1,15 @@
 #include "event.h"
 
-// CONTROLS PARAMETERS:
+/* Paramètres de contrôle */
 
 const int UP_KEY[4] = {SDL_SCANCODE_UP, SDL_SCANCODE_W, SDL_SCANCODE_2, SDL_SCANCODE_7};
 const int DOWN_KEY[4] = {SDL_SCANCODE_DOWN,SDL_SCANCODE_S, SDL_SCANCODE_3,SDL_SCANCODE_8};
 const int LEFT_KEY[4] = {SDL_SCANCODE_LEFT, SDL_SCANCODE_A, SDL_SCANCODE_1, SDL_SCANCODE_6};
 const int RIGHT_KEY[4] = {SDL_SCANCODE_RIGHT,SDL_SCANCODE_D, SDL_SCANCODE_4,SDL_SCANCODE_9};
 const int SPACE_KEY[4] = {SDL_SCANCODE_SPACE,SDL_SCANCODE_X, SDL_SCANCODE_5,SDL_SCANCODE_0};
+
+
+
 
 void doInput(player_t* listOfPlayers, int numberOfPlayers, int* pause)
 {
@@ -305,6 +308,8 @@ void showEscapeMenu(window_t* window, screen_t* screen, SDL_Texture** texturesLi
     SDL_RenderPresent(window->cur_renderer);
     SDL_Delay(10);
 }
+
+/* Mise en mouvement des joueurs et animations */
 int playerGoRight(player_t* player, window_t* window, SDL_Texture** texturesList)
 {
     player->x_coord += player->speed;
@@ -386,7 +391,10 @@ int playerGoDown(player_t* player, window_t* window, SDL_Texture** texturesList)
 	
     return 0;
 }
+/* --- Fin des fonctions de mouvements --- */
 
+
+/* Fonction régissant l'action de poser une bombe sur la carte */
 int playerPutBomb(player_t* player, map_t* map,window_t* window)
 {
     int sizeOfCell;
@@ -408,6 +416,7 @@ int playerPutBomb(player_t* player, map_t* map,window_t* window)
     return 0;
 }
 
+/* Actualisation de la carte (objet map) */
 int gridActualisation(map_t* map, screen_t* screen, window_t* window, SDL_Texture** texturesList){
 	wall_t wall;
     cell_t cell;
@@ -463,7 +472,7 @@ int playerReactToStar(player_t* player, cell_t* cell)
 	return 0;
 }
 
-
+/* Fonction régissant l'explosion et son étendue d'une bombe dans une case cell_t*/
 int explosionSetup(cell_t* cell, map_t* map){
 	int x =cell->x_coord;
 	int y =cell->y_coord;
@@ -583,6 +592,8 @@ int explosionSetup(cell_t* cell, map_t* map){
 	
 	return 0;
 }
+
+/* Detection d'un obstacle dans l'une des directions */
 int smthgIsUp(player_t* player, map_t* map, screen_t* screen)
 {
 
@@ -725,6 +736,7 @@ int smthgIsRight(player_t* player, map_t* map, screen_t* screen)
 	return 1;
 }
 
+/* Le joueur réagit à la bombe */
 int playerReactToBomb(player_t* player)
 {
 	if(player->health <= 0)
@@ -742,6 +754,7 @@ int playerReactToBomb(player_t* player)
 	}
 }
 
+/* Mise à jour des données du joueur */
 int playerActualise(player_t* player, map_t* map, screen_t* screen, window_t* window, SDL_Texture** texturesList)
 {
 	cell_t cell;
@@ -867,6 +880,7 @@ int playerActualise(player_t* player, map_t* map, screen_t* screen, window_t* wi
 	return 0;
 }
 
+/* Quand est-ce que le jeu doit s'arrêter ? */
 int caseOfGameOver(player_t* player, int numberOfPlayers)
 {
 	int numberOfDeaths= 0;

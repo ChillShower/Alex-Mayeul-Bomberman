@@ -69,6 +69,8 @@ int mapSetGrid(cell_t* grid, map_t* map){
     map->grid = grid;
     return 0;
 }
+
+/* */
 int generateMap(float density, float bonus, map_t* map){
     srand(time(NULL)); 
 

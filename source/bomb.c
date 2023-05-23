@@ -14,6 +14,8 @@ int bombInit(bomb_t** bomb, player_t* player){
 int isExploded(bomb_t* bomb){
     return bomb->frame==0;
 }
+
+/* Actualisation des données de la bombe à chaque tour */
 int bombActualise(bomb_t* bomb){
     if (bomb->frame>0){
     bomb->frame =bomb->frame -1;

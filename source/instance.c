@@ -69,7 +69,7 @@ int playerInit(player_t* player, int id, map_t* map, screen_t* screen, SDL_Textu
     player->y_strength = 1;
     player->immuned = 0;
     player->death = 0;
-    player->frame = FRAME_RATE;
+    player->frame = PLAYER_FRAME_RATE;
     player->inputs = inputs;
     player->inputs->up=0;
     player->inputs->down=0;
@@ -92,6 +92,11 @@ int playerInit(player_t* player, int id, map_t* map, screen_t* screen, SDL_Textu
 
 int texturesListInit(SDL_Texture** texturesList, window_t* window)
 {
+    /*
+        Cette fonction sert à charger toutes les textures avant d'être en jeu afin de 
+        libérer de la charge à l'ordinateur pendant le cours du jeu.
+    
+    */
     // JOUEUR:
     texturesList[0] = IMG_LoadTexture(window->cur_renderer, "resources/animations/characters/bomberman/bas_1.png");
     texturesList[1] = IMG_LoadTexture(window->cur_renderer, "resources/animations/characters/bomberman/bas_2.png");
@@ -106,26 +111,25 @@ int texturesListInit(SDL_Texture** texturesList, window_t* window)
     texturesList[10] = IMG_LoadTexture(window->cur_renderer, "resources/animations/characters/bomberman/haut_2.png");
     texturesList[11] = IMG_LoadTexture(window->cur_renderer, "resources/animations/characters/bomberman/haut_3.png");
 
-    // STATIQUE:
 
 // MUR:
-    texturesList[12] = IMG_LoadTexture(window->cur_renderer, "resources/static/wall/wall_brittle.png");
+    texturesList[12] = IMG_LoadTexture(window->cur_renderer, "resources/objects/wall/wall_brittle.png");
 
 // BOMB:
-    texturesList[13] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/bomb_3.png");
-    texturesList[14] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/bomb_2.png");
-    texturesList[15] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/bomb_1.png");
+    texturesList[13] = IMG_LoadTexture(window->cur_renderer, "resources/objects/bomb/bomb_3.png");
+    texturesList[14] = IMG_LoadTexture(window->cur_renderer, "resources/objects/bomb/bomb_2.png");
+    texturesList[15] = IMG_LoadTexture(window->cur_renderer, "resources/objects/bomb/bomb_1.png");
     
    
 
 // EXPLOSION:
-    texturesList[16] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/explosion_1.png");
-    texturesList[17] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/explosion_2.png");
-    texturesList[18] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/explosion_3.png");
-    texturesList[19] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/explosion_4.png");
-    texturesList[20] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/explosion_5.png");
-    texturesList[21] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/explosion_6.png");
-    texturesList[22] = IMG_LoadTexture(window->cur_renderer, "resources/static/bomb/explosion_7.png");
+    texturesList[16] = IMG_LoadTexture(window->cur_renderer, "resources/objects/bomb/explosion_1.png");
+    texturesList[17] = IMG_LoadTexture(window->cur_renderer, "resources/objects/bomb/explosion_2.png");
+    texturesList[18] = IMG_LoadTexture(window->cur_renderer, "resources/objects/bomb/explosion_3.png");
+    texturesList[19] = IMG_LoadTexture(window->cur_renderer, "resources/objects/bomb/explosion_4.png");
+    texturesList[20] = IMG_LoadTexture(window->cur_renderer, "resources/objects/bomb/explosion_5.png");
+    texturesList[21] = IMG_LoadTexture(window->cur_renderer, "resources/objects/bomb/explosion_6.png");
+    texturesList[22] = IMG_LoadTexture(window->cur_renderer, "resources/objetcs/bomb/explosion_7.png");
 
 // MORT:
 
@@ -134,7 +138,7 @@ int texturesListInit(SDL_Texture** texturesList, window_t* window)
     texturesList[25] = IMG_LoadTexture(window->cur_renderer, "resources/animations/characters/bomberman/mort_3.png");
 
 // GAMEOVER:
-    texturesList[26] = IMG_LoadTexture(window->cur_renderer, "resources/static/menu/gameover.png");
+    texturesList[26] = IMG_LoadTexture(window->cur_renderer, "resources/interface/menu/gameover.png");
 
 // STAR:
 
@@ -151,13 +155,13 @@ int texturesListInit(SDL_Texture** texturesList, window_t* window)
     texturesList[37] = IMG_LoadTexture(window->cur_renderer, "resources/animations/star/star_11.png");
     texturesList[38] = IMG_LoadTexture(window->cur_renderer, "resources/animations/star/star_12.png");
     texturesList[39] = IMG_LoadTexture(window->cur_renderer, "resources/animations/star/star_13.png");
-    texturesList[40] = IMG_LoadTexture(window->cur_renderer, "resources/static/UI/heart.png");
+    texturesList[40] = IMG_LoadTexture(window->cur_renderer, "resources/interface/UI/heart.png");
 
 // MENU:
 
-    texturesList[41] = IMG_LoadTexture(window->cur_renderer, "resources/menu/empty_button.png");
-    texturesList[42] = IMG_LoadTexture(window->cur_renderer, "resources/static/UI/icon.png");
-    texturesList[43] = IMG_LoadTexture(window->cur_renderer, "resources/static/UI/dead_icon.png");
+    texturesList[41] = IMG_LoadTexture(window->cur_renderer, "resources/interface/menu/empty_button.png");
+    texturesList[42] = IMG_LoadTexture(window->cur_renderer, "resources/interface/UI/icon.png");
+    texturesList[43] = IMG_LoadTexture(window->cur_renderer, "resources/interface/UI/dead_icon.png");
     return 0;
 }
 

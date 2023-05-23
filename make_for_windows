@@ -13,7 +13,7 @@ WDEL_OBJ_FILES = $(patsubst $(SRC_DIR)/%.o, $(SRC_DIR)\\%.o, $(OBJ_FILES))
 all: main
 
 game: $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $@ $(MAIN_DIR)/main.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+	$(CC) $(CFLAGS) -o $@.exe $(MAIN_DIR)/main.c $(OBJ_FILES) -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(INC_DIR) -L$(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf

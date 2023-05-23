@@ -17,7 +17,7 @@ int initWindow(screen_t* screen,window_t* window){
     }
     else
     {
-        window->cur_window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen->width, screen->height, SDL_WINDOW_FULLSCREEN_DESKTOP );
+        window->cur_window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen->width, screen->height,  SDL_WINDOW_SHOWN);
         if( window->cur_window == NULL )
         {
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
@@ -114,7 +114,7 @@ int grid_renderer(screen_t* screen, SDL_Rect* array_rect, map_t* map, window_t* 
         for(int j=0;j<grid_height;j++){
 
             cell = map->grid[i + j*grid_width];
-            /*mur*/
+
             cellGetWall(&wall, &cell);
             if( wall.wallstate == SOLID)
             {
@@ -150,18 +150,6 @@ int grid_renderer(screen_t* screen, SDL_Rect* array_rect, map_t* map, window_t* 
 		                SDL_RenderCopy(window->cur_renderer, texturesList[15], NULL,&array_rect[i+j*grid_width]);
 	                }
 
-                    
-                    if (isExploded(cell.bomb))
-                    {
-
-                        //SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
-                    }
-
-                    
-                    if (isExploded(cell.bomb))
-                    {
-                        //SDL_RenderFillRect(window->cur_renderer,&array_rect[i+j*grid_width]);
-                    }
                 };
                 if(cell.explosion !=NULL)
                 {
