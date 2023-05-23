@@ -112,7 +112,7 @@ int main( int argc, char* args[])
 
     if(reactionQuit == CLICKED)
     {
-        SDL_Texture* alex = IMG_LoadTexture(window.cur_renderer,"/resources/interface/menu/alex.png");
+        SDL_Texture* alex = IMG_LoadTexture(window.cur_renderer,"resources/interface/menu/alex.png");
         SDL_RenderCopy(window.cur_renderer, alex, NULL,NULL);
         SDL_RenderPresent(window.cur_renderer);
         SDL_Delay(100);

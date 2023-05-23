@@ -46,7 +46,10 @@ int main( int argc, char* args[])
         printf("Probleme de lecture du fichier font..\n");
     }
 
-    SDL_Texture* title = IMG_LoadTexture(window.cur_renderer,"resources/interface/menu/background.png");
+    SDL_Texture* title = IMG_LoadTexture(window.cur_renderer,"resources/interface/menu/background.png"); //"resources/texts/title.png");
+    int titleWidth;
+    int titleHeight;
+    SDL_QueryTexture(title, NULL, NULL, &titleWidth, &titleHeight);
 
     /* --- LANCEMENT DU MENU DE DEMARRAGE --- */
     buttonstate_t reactionPlay = NONE;

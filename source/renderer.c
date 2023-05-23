@@ -17,7 +17,7 @@ int initWindow(screen_t* screen,window_t* window){
     }
     else
     {
-        window->cur_window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen->width, screen->height,  SDL_WINDOW_SHOWN);
+        window->cur_window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen->width, screen->height, SDL_WINDOW_FULLSCREEN_DESKTOP );
         if( window->cur_window == NULL )
         {
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
